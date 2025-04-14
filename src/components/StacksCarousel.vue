@@ -1,23 +1,113 @@
-<script setup>
+<script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import JestIcon from './../assets/stacks/Jest.svg'
+import PostgresIcon from './../assets/stacks/PostgreSQL.svg'
+import MySQLIcon from './../assets/stacks/MySQL.svg'
+import MSSQLIcon from './../assets/stacks/MSSQL.svg'
+import SQLiteIcon from './../assets/stacks/SQLite.svg'
+import HadoopIcon from './../assets/stacks/Hadoop.svg'
+import DotNetIcon from './../assets/stacks/DotNet.svg'
+import BlazorIcon from './../assets/stacks/Blazor.svg'
+import FastAPIIcon from './../assets/stacks/FastAPI.svg'
+import TraefikIcon from './../assets/stacks/Traefik.svg'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faGithub, faVuejs, faReact, faJs, faNode } from '@fortawesome/free-brands-svg-icons'
+import {
+  faGithub,
+  faVuejs,
+  faReact,
+  faJs,
+  faNode,
+  faAngular,
+  faPython,
+  faAws,
+  faLinux,
+  faGit,
+  faJenkins,
+  faHtml5,
+  faCss3,
+  faBootstrap,
+  faDocker
+} from '@fortawesome/free-brands-svg-icons'
 
-library.add(faGithub, faVuejs, faReact, faJs, faNode)
+import {
+  faDatabase,
+  faCloud,
+  faCogs,
+  faShieldAlt,
+  faCube,
+  faBoxesStacked,
+  faServer,
+  faCode
+} from '@fortawesome/free-solid-svg-icons'
 
-const stacks = [
-  { icon: ['fab', 'github'] },
-  { icon: ['fab', 'vuejs'] },
-  { icon: ['fab', 'react'] },
-  { icon: ['fab', 'js'] },
-  { icon: ['fab', 'node'] },
-  { icon: ['fab', 'github'] },
-  { icon: ['fab', 'vuejs'] },
-  { icon: ['fab', 'react'] },
-  { icon: ['fab', 'js'] },
-  { icon: ['fab', 'node'] }
+library.add(
+  faGithub,
+  faVuejs,
+  faReact,
+  faJs,
+  faNode,
+  faAngular,
+  faPython,
+  faAws,
+  faLinux,
+  faGit,
+  faJenkins,
+  faHtml5,
+  faCss3,
+  faBootstrap,
+  faDocker,
+  faDatabase,
+  faCloud,
+  faCogs,
+  faShieldAlt,
+  faCube,
+  faBoxesStacked,
+  faServer,
+  faCode
+)
+
+// Shuffle helper
+function shuffleArray<T>(array: T[]): T[] {
+  return array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+}
+
+// Unshuffled raw stack list
+const rawStacks = [
+  { type: 'fa', icon: ['fab', 'python'], name: 'Python' },
+  { type: 'fa', icon: ['fab', 'node'], name: 'Node.js' },
+  { type: 'fa', icon: ['fab', 'js'], name: 'JavaScript' },
+  { type: 'fa', icon: ['fab', 'react'], name: 'React' },
+  { type: 'fa', icon: ['fab', 'vuejs'], name: 'Vue.js' },
+  { type: 'fa', icon: ['fab', 'angular'], name: 'Angular' },
+  { type: 'fa', icon: ['fab', 'github'], name: 'GitHub' },
+  { type: 'fa', icon: ['fab', 'git'], name: 'Git' },
+  { type: 'fa', icon: ['fab', 'jenkins'], name: 'Jenkins' },
+  { type: 'fa', icon: ['fab', 'aws'], name: 'AWS' },
+  { type: 'fa', icon: ['fab', 'linux'], name: 'Linux' },
+  { type: 'fa', icon: ['fab', 'html5'], name: 'HTML5' },
+  { type: 'fa', icon: ['fab', 'css3'], name: 'CSS3' },
+  { type: 'fa', icon: ['fab', 'bootstrap'], name: 'Bootstrap' },
+  { type: 'fa', icon: ['fab', 'docker'], name: 'Docker' },
+  { type: 'svg', icon: JestIcon, name: 'Jest' },
+  { type: 'svg', icon: PostgresIcon, name: 'PostgreSQL' },
+  { type: 'svg', icon: MySQLIcon, name: 'MySQL' },
+  { type: 'svg', icon: MSSQLIcon, name: 'MSSQL' },
+  { type: 'svg', icon: SQLiteIcon, name: 'SQLite' },
+  { type: 'svg', icon: HadoopIcon, name: 'Hadoop' },
+  { type: 'svg', icon: DotNetIcon, name: '.NET API' },
+  { type: 'svg', icon: BlazorIcon, name: 'Blazor' },
+  { type: 'svg', icon: FastAPIIcon, name: 'FastAPI' },
+  { type: 'svg', icon: TraefikIcon, name: 'Traefik' }
 ]
+
+// Shuffle them once on load
+const stacks = shuffleArray(rawStacks)
 </script>
+
 
 <template>
   <!-- Title -->
@@ -27,10 +117,15 @@ const stacks = [
   <div class="carousel-wrapper">
     <div class="carousel">
       <ul class="stack-list">
-        <!-- Duplicate the array so it scrolls infinitely -->
         <li v-for="(stack, index) in stacks.concat(stacks)" :key="index">
-          <font-awesome-icon :icon="stack.icon" class="stack-icon" />
-        </li>
+  <template v-if="stack.type === 'fa'">
+    <font-awesome-icon :icon="stack.icon" class="stack-icon" />
+  </template>
+  <template v-else-if="stack.type === 'svg'">
+    <img :src="stack.icon" :alt="stack.name" class="stack-icon svg-icon" />
+  </template>
+</li>
+
       </ul>
     </div>
   </div>
@@ -75,13 +170,25 @@ const stacks = [
 .stack-list {
   display: flex;
   gap: 30px;
-  animation: scroll 12s linear infinite;
+  animation: scroll 40s linear infinite;
   list-style: none;
   padding: 0;
   margin: 0;
   width: max-content;
 }
+.svg-icon {
+  height: 45px;
+  width: 45px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  filter: brightness(0) invert(1); /* forces black SVGs to become white */
+}
 
+
+.svg-icon:hover {
+  transform: scale(1.4);
+  z-index: 9000;
+}
 .stack-icon {
   color: white;
   font-size: 45px;

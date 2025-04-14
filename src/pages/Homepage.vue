@@ -1,14 +1,19 @@
-<script setup>
+
+<script lang="ts" setup>
 import AnimatedText from './../components/AnimatedText.vue'
 import StacksCarousel from './../components/StacksCarousel.vue'
 import AboutMe from './../components/AboutMe.vue'
 import ContactMe from './../components/ContactMe.vue'
+import Projects from './../components/Projects.vue'  
+defineOptions({
+  name: 'MyHomepage'
+})
 </script>
 
 <template>
   <div class="introContainer">
-    <div class="custom-animated-text" >
-      <AnimatedText/>
+    <div class="custom-animated-text">
+      <AnimatedText />
       <h4 class="timeZone">Patras, Greece • UTC/GMT +2</h4>
     </div>
     <div class="personalPhoto">
@@ -18,10 +23,15 @@ import ContactMe from './../components/ContactMe.vue'
   <div class="stacksCarousel">
     <StacksCarousel />
   </div>
-  <div class="about-me-container">
+  <div class="about-me-container" id="about">
     <AboutMe />
   </div>
-  <div class="contact-container">
+
+  <div class="projects-container" id="projects" style="height: 90vh;">
+    <Projects/> 
+  </div>
+
+  <div class="contact-container" id="contact">
     <ContactMe/> 
   </div>
 </template>

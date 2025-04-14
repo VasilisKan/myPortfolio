@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
 // Word list with beautiful blue tones
@@ -29,7 +29,7 @@ onMounted(() => {
         {{ headerWords[currentIndex].text }}
       </span>
     </transition>
-    &nbsp;applications, using a variety of stacks.
+    &nbsp;applications, using <br/> a variety of stacks.
   </h1>
 </template>
 
@@ -39,7 +39,7 @@ onMounted(() => {
   font-size: 32px;
   text-align: start;
   line-height: 1.6;
-  max-width: 58ch;
+  max-width: 60ch;
   margin: auto;
   font-weight:700;
 }
@@ -51,7 +51,6 @@ onMounted(() => {
   min-width: 120px;
 }
 
-/* Smooth fade/scale animation */
 .fade-scale-enter-active,
 .fade-scale-leave-active {
   transition: all 0.7s ease;

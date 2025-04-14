@@ -1,4 +1,7 @@
-<script setup>
+<script lang="ts" setup>
+defineOptions({
+  name: 'MyHeader'
+});
 import githubIcon from './../assets/github.png';
 import linkedinIcon from '../assets/linkedin.png';
 import emailIcon from '../assets/instagram.png';
@@ -12,7 +15,7 @@ const menuItems = [
 
 const socialLinks = [
   { name: 'GitHub', href: 'https://github.com/VasilisKan', icon: githubIcon },
-  { name: 'LinkedIn', href: 'https://linkedin.com/in/VasilisKan', icon: linkedinIcon },
+  { name: 'LinkedIn', href: 'www.linkedin.com/in/vkanellos', icon: linkedinIcon },
   { name: 'Instagram', href: 'mailto:vasilis@kanellos.me', icon: emailIcon },
 ];
 

@@ -21,6 +21,9 @@ import Homepage from './pages/Homepage.vue';
     <footer class="footer">
       <p>© 2025 Vasilis Kanellos. All rights reserved.</p>
       <p>Designed and developed by Vasilis Kanellos</p>
+      <div class="bottomGradient">
+        <img src="./assets/gradient.png" alt="">
+  </div>
     </footer>
 </template>
 
@@ -28,6 +31,7 @@ import Homepage from './pages/Homepage.vue';
 html, body {
   margin: 0;
   width: 100vw;
+  overflow-x: hidden;
 }
 
 #app {
@@ -54,6 +58,10 @@ html, body {
 }
 
 .footer{
+  margin-top: 100px;
+  position: relative;
+  color: aliceblue;
+  font-weight: 700;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -68,6 +76,21 @@ html, body {
   z-index: -1;}
 
 .topGradient img {
+  width: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  display: block;
+}
+.bottomGradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  transform: rotate(180deg);
+}
+
+.bottomGradient img {
   width: 100%;
   object-fit: cover;
   pointer-events: none;

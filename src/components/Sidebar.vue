@@ -1,4 +1,5 @@
-<script setup>
+<script lang="ts" setup>
+defineOptions({ name: 'MySidebar' })
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import * as brands from '@fortawesome/free-brands-svg-icons'
@@ -36,17 +37,18 @@ const socialData = [
 .sidebar-wrapper {
   position: fixed;
   top: 50%;
-  left: 0;
+  right: 0; 
   transform: translateY(-50%);
   background-color: #1c1c1c;
-  border-top-right-radius: 14px;
-  border-bottom-right-radius: 14px;
+  border-top-left-radius: 14px;  
+  border-bottom-left-radius: 14px; 
   padding: 12px 6px;
-  width: 70px;
-  box-shadow: 2px 4px 12px rgba(255, 255, 255, 0.08);
+  width: 80px;
+  box-shadow: -2px 4px 12px rgba(255, 255, 255, 0.08); 
   border: 1px solid rgba(255, 255, 255, 0.05);
   z-index: 999;
 }
+
 
 .icon-only-list {
   list-style: none;
@@ -55,12 +57,12 @@ const socialData = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
 .icon-only-link {
-  width: 36px;
-  height: 36px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background-color: #262626;
   display: flex;

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -24,46 +24,50 @@ const handleSubmit = () => {
 </script>
 
 <template>
-    <div class="contact-card">
+  <div class="contact-card">
         <h2 class="form-title">
       <font-awesome-icon :icon="['fas', 'envelope-open-text']" class="form-icon" />
       Let’s Connect
     </h2>
     <div class="contact-form">
-    <form @submit.prevent="handleSubmit" class="form-wrapper">
-      <label>
-        <span>Hey! What do your friends call you?</span>
-        <input type="text" v-model="name" placeholder="Batman? Ironman?" required />
-      </label>
+      <form @submit.prevent="handleSubmit" class="form-wrapper">
+        <label>
+          <span>Hey! What do your friends call you?</span>
+          <input type="text" v-model="name" placeholder="Batman? Ironman?" required />
+        </label>
 
-      <label>
-        <span>Drop your email so I can actually reply </span>
-        <input type="email" v-model="email" placeholder="you@cooldomain.com" required />
-      </label>
+        <label>
+          <span>Drop your email so I can actually reply </span>
+          <input type="email" v-model="email" placeholder="you@cooldomain.com" required />
+        </label>
 
-      <label>
-        <span>You are a...</span>
-        <select v-model="role" required>
-          <option disabled value="">Choose wisely 👀</option>
-          <option v-for="option in roles" :key="option">{{ option }}</option>
-        </select>
-      </label>
+        <label>
+          <span>You are a...</span>
+          <select v-model="role" required>
+            <option disabled value="">Choose wisely 👀</option>
+            <option v-for="option in roles" :key="option">{{ option }}</option>
+          </select>
+        </label>
 
-      <label>
-        <span>Spill the beans 🍵</span>
-        <textarea v-model="message" placeholder="Tell me something cool..." rows="4"></textarea>
-      </label>
+        <label>
+          <span>I'm all ears..</span>
+          <textarea v-model="message" placeholder="Tell me something cool..." rows="4"></textarea>
+        </label>
 
-      <button type="submit">Let’s Chat 🚀</button>
+        <button type="submit">Let’s Chat 🚀</button>
     </form>
+    </div>
+    <div class="rounded-arrow">
+      <img src="@/assets/curved-arrow.png" alt="Decorative arrow" class="rounded-arrow-svg" />
+    </div>
   </div>
-        </div>
 </template>
 
 <style scoped>
 .contact-card {
-margin-top: 100px 50px;
-border-top: 1px solid #ffffff22;
+  position: relative;
+  margin-top: 100px 50px;
+  border-top: 1px solid #ffffff22;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
@@ -166,5 +170,16 @@ button:hover {
     font-size: 22px;
   }
 }
-</style>
 
+.rounded-arrow{
+  position: absolute;
+  bottom: -15em;
+  right: -9em;
+  z-index: -1;
+  /* rotate: deg; */
+}
+.rounded-arrow img{
+  width: 450px;
+  height: auto;
+}
+</style>
