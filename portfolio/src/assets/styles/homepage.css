@@ -1,0 +1,40 @@
+.introContainer {
+    display: flex;
+    padding: 0px 3em;
+}
+
+.introContainer > * {
+    flex: 1;
+    align-items: center;
+}
+.custom-animated-text{
+
+}
+
+.personalPhoto {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.personalPhoto img {
+    height: 200px;
+    width: auto;
+    border-radius: 100%; 
+    box-shadow: 2px 4px 12px rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.timeZone{
+    margin-top : 1em;
+}
+
+.stacksCarousel{
+    justify-self: center;
+    margin-top: 120px;
+    max-width: 90%;
+}
+.about-me-container{
+    justify-self: center;
+    margin-top: 120px;
+    max-width: 90%;
+}
