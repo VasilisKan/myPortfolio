@@ -167,7 +167,7 @@ const stacks = shuffleArray(rawStacks)
 
 .carousel {
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 
@@ -185,7 +185,7 @@ const stacks = shuffleArray(rawStacks)
   width: 45px;
   object-fit: contain;
   transition: transform 0.3s ease;
-  filter: brightness(0) invert(1); /* forces black SVGs to become white */
+  filter: brightness(0) invert(1);
 }
 
 
