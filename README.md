@@ -1,39 +1,14 @@
-# portfolio
+# 🌐 Vasilis Kanellos – Personal Portfolio
 
-This template should help get you started developing with Vue 3 in Vite.
+Welcome to the repository for [kanellos.me](https://kanellos.me) — my personal portfolio showcasing my journey, projects, and skills as a software developer.
 
-## Recommended IDE Setup
+## 🧑‍💻 About Me
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+I'm Vasilis Kanellos, a passionate software developer dedicated to crafting efficient, scalable, and user-friendly software solutions. My portfolio highlights my work, experiences, and the technologies I specialize in.
 
-## Type Support for `.vue` Imports in TS
+## 🚀 Features
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- **Home**: An overview of who I am and what I do.
+- **Projects**: A curated selection of my work, demonstrating my skills and interests ( more to start droping soon ).
+- **Contact**: Ways to get in touch with me for collaborations or inquiries.
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
