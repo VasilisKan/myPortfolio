@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons'
+import emailjs from 'emailjs-com'
 
 library.add(faEnvelopeOpenText)
 
@@ -10,6 +11,9 @@ const name = ref('')
 const email = ref('')
 const role = ref('')
 const message = ref('')
+const isSubmitting = ref(false)
+const submitSuccess = ref(false)
+const submitError = ref('')
 
 const roles = [
   '🌟 Curious human',
@@ -18,26 +22,73 @@ const roles = [
   '🧠 Startup dreamer'
 ]
 
-const handleSubmit = () => {
-  alert(`Thanks ${name.value}! I’ll be in touch ✌️`)
+const handleSubmit = async () => {
+  if (isSubmitting.value) return
+  
+  isSubmitting.value = true
+  submitError.value = ''
+  
+  try {
+    emailjs.init('4KKFfCPunPNbv8_gU')
+    
+    const response = await emailjs.send(
+      'service_g6yymsj',   
+      'template_dp5sr9e',  
+      {
+        from_name: name.value,
+        from_email: email.value,
+        role: role.value,
+        message: message.value
+      }
+    )
+    
+    if (response.status === 200) {
+      submitSuccess.value = true
+      // Reset form
+      name.value = ''
+      email.value = ''
+      role.value = ''
+      message.value = ''
+    } else {
+      throw new Error(response.text)
+    }
+  } catch (error) {
+    console.error('Full error details:', error)
+    if (error instanceof Error) {
+      submitError.value = `Error: ${error.message || 'Failed to send message'}`
+    } else {
+      submitError.value = 'Error: Failed to send message'
+    }
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
 
 <template>
   <div class="contact-card">
-        <h2 class="form-title">
+    <h2 class="form-title">
       <font-awesome-icon :icon="['fas', 'envelope-open-text']" class="form-icon" />
-      Let’s Connect
+      Let's Connect
     </h2>
+    
     <div class="contact-form">
       <form @submit.prevent="handleSubmit" class="form-wrapper">
+        <div v-if="submitSuccess" class="success-message">
+          Thanks for reaching out! I'll get back to you soon. ✨
+        </div>
+        
+        <div v-if="submitError" class="error-message">
+          {{ submitError }}
+        </div>
+        
         <label>
           <span>Hey! What do your friends call you?</span>
           <input type="text" v-model="name" placeholder="Batman? Ironman?" required />
         </label>
 
         <label>
-          <span>Drop your email so I can actually reply </span>
+          <span>Drop your email so I can actually reply</span>
           <input type="email" v-model="email" placeholder="you@cooldomain.com" required />
         </label>
 
@@ -45,18 +96,20 @@ const handleSubmit = () => {
           <span>You are a...</span>
           <select v-model="role" required>
             <option disabled value="">Choose wisely 👀</option>
-            <option v-for="option in roles" :key="option">{{ option }}</option>
+            <option v-for="option in roles" :key="option" :value="option">{{ option }}</option>
           </select>
         </label>
-
         <label>
           <span>I'm all ears..</span>
-          <textarea v-model="message" placeholder="Tell me something cool..." rows="4"></textarea>
+          <textarea v-model="message" placeholder="Tell me something cool..." rows="4" required></textarea>
         </label>
 
-        <button type="submit">Let’s Chat 🚀</button>
-    </form>
+        <button type="submit" :disabled="isSubmitting">
+          {{ isSubmitting ? 'Sending...' : 'Let\'s Chat 🚀' }}
+        </button>
+      </form>
     </div>
+    
     <div class="rounded-arrow">
       <img src="@/assets/curved-arrow.png" alt="Decorative arrow" class="rounded-arrow-svg" />
     </div>
@@ -64,42 +117,42 @@ const handleSubmit = () => {
 </template>
 
 <style scoped>
+
 .contact-card {
   position: relative;
-  margin-top: 100px 50px;
+  margin: 100px 50px;
   border-top: 1px solid #ffffff22;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
- 
 
 .form-icon {
   font-size: 22px;
   color: #00c9ff;
 }
 
-
 .form-title {
-  margin: 40px  20px;
-    text-align: center;
-    font-size: 32px;
-    color: #e0e0e0;
-    font-weight: 700;
-    position: relative;
+  margin: 40px 20px;
+  text-align: center;
+  font-size: 32px;
+  color: #e0e0e0;
+  font-weight: 700;
+  position: relative;
 }
 
 .form-title::after {
   content: "";
   display: block;
-  margin: 0.4rem auto 0; 
+  margin: 0.4rem auto 0;
   width: 60px;
   height: 2px;
-  background-color: #ffffff22; 
+  background-color: #ffffff22;
 }
 
-.contact-form{
-    justify-self: left;
-    width: 70%;
+.contact-form {
+  justify-self: left;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .form-wrapper {
@@ -156,30 +209,92 @@ button {
   transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   box-shadow: 0 0 10px rgba(0, 201, 255, 0.25);
   transform: translateY(-1px);
 }
 
-@media (max-width: 640px) {
-  .contact-card {
-    padding: 24px;
-  }
-
-  .form-title {
-    font-size: 22px;
-  }
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.rounded-arrow{
+.success-message {
+  background-color: rgba(0, 201, 255, 0.1);
+  border: 1px solid #00c9ff;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #00c9ff;
+}
+
+.error-message {
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff0000;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #ff0000;
+}
+
+.rounded-arrow {
   position: absolute;
   bottom: -15em;
   right: -9em;
   z-index: -1;
-  /* rotate: deg; */
 }
-.rounded-arrow img{
+
+.rounded-arrow img {
   width: 450px;
   height: auto;
+}
+
+@media (max-width: 768px) {
+  .contact-card {
+    margin: 100px 0px 50px;
+  }
+  
+  .contact-form {
+    width: 90%;
+  }
+  
+  .form-wrapper {
+    padding: 24px;
+    margin: 40px auto;
+  }
+  
+  .form-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-card {
+    margin: 80px 0px 40px;
+  }
+  
+  .form-wrapper {
+    padding: 20px;
+    margin: 30px auto;
+  }
+  
+  .form-title {
+    font-size: 24px;
+    margin: 30px 15px;
+  }
+  
+  .rounded-arrow {
+  position: absolute;
+  bottom: -12em;
+  right: 0;
+  z-index: -1;
+}
+
+.rounded-arrow img {
+  width: 250px;
+  height: auto;
+}
 }
 </style>

@@ -67,6 +67,13 @@ library.add(
   faCode
 )
 
+// Define type for stack item
+interface Stack {
+  type: 'fa' | 'svg'
+  icon: any 
+  name: string
+}
+
 // Shuffle helper
 function shuffleArray<T>(array: T[]): T[] {
   return array
@@ -76,7 +83,7 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 // Unshuffled raw stack list
-const rawStacks = [
+const rawStacks: Stack[] = [
   { type: 'fa', icon: ['fab', 'python'], name: 'Python' },
   { type: 'fa', icon: ['fab', 'node'], name: 'Node.js' },
   { type: 'fa', icon: ['fab', 'js'], name: 'JavaScript' },
@@ -104,32 +111,29 @@ const rawStacks = [
   { type: 'svg', icon: TraefikIcon, name: 'Traefik' }
 ]
 
-// Shuffle them once on load
+// Shuffle once on load
 const stacks = shuffleArray(rawStacks)
 </script>
 
-
 <template>
-  <!-- Title -->
   <h2 class="stacksTitle">Tech stack</h2>
-  
-  <!-- Carousel Wrapper -->
+
   <div class="carousel-wrapper">
     <div class="carousel">
       <ul class="stack-list">
         <li v-for="(stack, index) in stacks.concat(stacks)" :key="index">
-  <template v-if="stack.type === 'fa'">
-    <font-awesome-icon :icon="stack.icon" class="stack-icon" />
-  </template>
-  <template v-else-if="stack.type === 'svg'">
-    <img :src="stack.icon" :alt="stack.name" class="stack-icon svg-icon" />
-  </template>
-</li>
-
+          <template v-if="stack.type === 'fa'">
+            <font-awesome-icon :icon="stack.icon" class="stack-icon" />
+          </template>
+          <template v-else-if="stack.type === 'svg'">
+            <img :src="stack.icon" :alt="stack.name" class="stack-icon svg-icon" />
+          </template>
+        </li>
       </ul>
     </div>
   </div>
 </template>
+
 
 <style>
 /* Minimal styling for the Tech Stack title */
@@ -215,4 +219,16 @@ const stacks = shuffleArray(rawStacks)
 .carousel-wrapper:hover .stack-list {
   animation-play-state: paused;
 }
+
+@media  (max-width: 768px) {  
+  .stacksTitle {
+    font-size: 28px;
+    margin: 20px 0;
+  }
+  .svg-icon {
+  height: 40px;
+  width: 40px;
+}
+}
+
 </style>

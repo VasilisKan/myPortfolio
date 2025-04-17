@@ -29,7 +29,7 @@ onMounted(() => {
         {{ headerWords[currentIndex].text }}
       </span>
     </transition>
-    &nbsp;applications, using <br/> a variety of stacks.
+    &nbsp;applications, using <br class="desktop-break"/> a variety of stacks.
   </h1>
 </template>
 
@@ -41,7 +41,7 @@ onMounted(() => {
   line-height: 1.6;
   max-width: 60ch;
   margin: auto;
-  font-weight:700;
+  font-weight: 700;
 }
 
 .fancy-word {
@@ -64,5 +64,40 @@ onMounted(() => {
 .fade-scale-leave-to {
   opacity: 0;
   transform: scale(1.1) translateY(-10px);
+}
+
+
+.desktop-break {
+    display: block;
+  }
+  
+/* Mobile styles */
+@media (max-width: 768px) {  
+  .intro {
+    font-size: 22px;
+    line-height: 1.5;
+    padding: 0 0;
+    max-width: 100%;
+  }
+  
+  .fancy-word {
+    font-size: 24px;
+    min-width: 100px;
+  }
+  .desktop-break {
+  display: none;
+}
+
+  /* Adjust for very small screens */
+  @media (max-width: 400px) {
+    .intro {
+      font-size: 20px;
+    }
+    
+    .fancy-word {
+      font-size: 22px;
+      min-width: 0px;
+    }
+  }
 }
 </style>

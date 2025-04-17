@@ -4,7 +4,7 @@ import AnimatedText from './../components/AnimatedText.vue'
 import StacksCarousel from './../components/StacksCarousel.vue'
 import AboutMe from './../components/AboutMe.vue'
 import ContactMe from './../components/ContactMe.vue'
-import Projects from './../components/Projects.vue'  
+import Projects from './../components/ProjectsList.vue'  
 defineOptions({
   name: 'MyHomepage'
 })
@@ -27,7 +27,7 @@ defineOptions({
     <AboutMe />
   </div>
 
-  <div class="projects-container" id="projects" style="height: 90vh;">
+  <div class="projects-container" id="projects">
     <Projects/> 
   </div>
 

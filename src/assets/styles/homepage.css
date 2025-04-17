@@ -36,12 +36,16 @@ max-width: 70%;
 .about-me-container{
     justify-self: center;
     margin-top: 120px;
-    max-width: 90%;
+    max-width: 95%;
 }
 
 .contact-container{
- margin-top: 200px;   
+    margin-top: 100px;
  margin-bottom: 150px;   
+}
+
+.projects-container{
+    margin-top: 100px;
 }
 
 .about-me-container,
@@ -49,3 +53,34 @@ max-width: 70%;
 .contact-container {
   scroll-margin-top: 30px;
 }
+
+
+@media  (max-width: 768px) {  
+    .introContainer{
+      display: flex;
+      flex-direction: column;
+      padding: 0 0;
+      gap: 5em;
+      align-items: center;
+    }
+    .custom-animated-text{
+      max-width: 100%;
+    }
+    .stacksCarousel{
+        justify-self: center;
+        margin-top: 40px;
+        max-width: 100%;
+    }
+    .about-me-container{
+        justify-self: center;
+        margin-top: 50px;
+        max-width: 100%;
+    }
+    .contact-container{
+        margin-top: 50px;
+     margin-bottom: 150px;   
+    }
+    .projects-container{
+        margin-top: 50px;
+    }
+  }

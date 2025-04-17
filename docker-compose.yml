@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: always
+    command:
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      # You can add HTTPS entrypoints later (e.g. port 443) if desired.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      # Expose the internal Traefik dashboard on analytics.kanellos.me
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`analytics.kanellos.me`)"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=web"
+
+  vue-app:
+    build: .
+    container_name: vue-app
+    restart: always
+    expose:
+      - "80"  # The container listens on port 80 via Nginx
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vueapp.rule=Host(`kanellos.me`)"
+      - "traefik.http.routers.vueapp.entrypoints=web"

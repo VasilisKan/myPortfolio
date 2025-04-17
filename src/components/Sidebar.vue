@@ -9,15 +9,13 @@ library.add(
   brands.faFacebook,
   brands.faInstagram,
   brands.faXTwitter,
-  brands.faYoutube
 )
 
 const socialData = [
   { link: "https://github.com/VasilisKan", icon: ['fab', 'github'] },
-  { link: "https://facebook.com/VasilisKan", icon: ['fab', 'facebook'] },
-  { link: "https://instagram.com/VasilisKan", icon: ['fab', 'instagram'] },
-  { link: "https://x.com/VasilisKan", icon: ['fab', 'x-twitter'] },
-  { link: "https://youtube.com/@VasilisKan", icon: ['fab', 'youtube'] }
+  { link: "#", icon: ['fab', 'facebook'] },
+  { link: "#", icon: ['fab', 'instagram'] },
+  { link: "#", icon: ['fab', 'x-twitter'] },
 ]
 </script>
 
@@ -39,16 +37,17 @@ const socialData = [
   top: 50%;
   right: 0; 
   transform: translateY(-50%);
-  background-color: #1c1c1c;
-  border-top-left-radius: 14px;  
-  border-bottom-left-radius: 14px; 
-  padding: 12px 6px;
-  width: 80px;
+  background-color: rgba(28, 28, 28, 0.9);
+  backdrop-filter: blur(8px);
+  border-top-left-radius: 12px;  
+  border-bottom-left-radius: 12px; 
+  padding: 10px 4px;
+  width: 60px;
   box-shadow: -2px 4px 12px rgba(255, 255, 255, 0.08); 
   border: 1px solid rgba(255, 255, 255, 0.05);
   z-index: 999;
+  transition: all 0.3s ease;
 }
-
 
 .icon-only-list {
   list-style: none;
@@ -61,10 +60,10 @@ const socialData = [
 }
 
 .icon-only-link {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-color: #262626;
+  background-color: rgba(38, 38, 38, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,12 +78,60 @@ const socialData = [
 }
 
 .icon {
-  font-size: 16px;
+  font-size: 15px;
   color: white;
   transition: color 0.3s ease;
 }
 
 .icon-only-link:hover .icon {
   color: #121212;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .sidebar-wrapper {
+    width: 56px;
+    padding: 8px 3px;
+  }
+  
+  .icon-only-link {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .icon {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-wrapper {
+    margin-top: 10px;
+    width: 60px;
+    padding: 6px 2px;
+  }
+  
+  .icon-only-link {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .icon {
+    font-size: 16px;
+  }
+}
+
+@media (hover: none) {
+  .icon-only-link:hover {
+    background-color: rgba(38, 38, 38, 0.8);
+    box-shadow: none;
+    transform: none;
+  }
+  
+  .icon-only-link:active {
+    background-color: #00c9ff;
+    box-shadow: 0 0 10px rgba(0, 201, 255, 0.5);
+    transform: scale(1.1);
+  }
 }
 </style>
