@@ -9,6 +9,21 @@ I'm Vasilis Kanellos, a passionate software developer dedicated to crafting effi
 ## 🚀 Features
 
 - **Home**: An overview of who I am and what I do.
-- **Projects**: A curated selection of my work, demonstrating my skills and interests ( more to start droping soon ).
+- **Projects**: A curated selection of my work, demonstrating my skills and interests. *(Projects will be added soon!)*
 - **Contact**: Ways to get in touch with me for collaborations or inquiries.
 
+## 📌 Currently Working On
+
+- Reviving my GitHub presence with exciting personal and open-source projects.
+- Building scalable web applications using modern cloud services.
+
+## 📬 Let's Connect
+
+- [LinkedIn](https://www.linkedin.com/in/vkanellos)
+- [Portfolio Website](https://kanellos.me)
+
+---
+
+*Just a fresh start on my GitHub journey. More content will be uploaded soon. Don't judge version 1 of my portfolio — have faith!*
+
+> "Code is like humor. When you have to explain it, it’s bad." – Cory House
