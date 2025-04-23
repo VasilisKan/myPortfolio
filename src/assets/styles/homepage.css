@@ -1,0 +1,86 @@
+.introContainer {
+    display: flex;
+    padding: 0px 3em;
+}
+
+.introContainer > * {
+    align-items: center;
+}
+.custom-animated-text{
+max-width: 70%;
+}
+
+.personalPhoto {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.personalPhoto img {
+    height: 200px;
+    width: auto;
+    border-radius: 100%; 
+    box-shadow: 2px 4px 12px rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.timeZone{
+    margin-top : 1em;
+}
+
+.stacksCarousel{
+    justify-self: center;
+    margin-top: 120px;
+    max-width: 90%;
+}
+.about-me-container{
+    justify-self: center;
+    margin-top: 120px;
+    max-width: 95%;
+}
+
+.contact-container{
+    margin-top: 100px;
+ margin-bottom: 150px;   
+}
+
+.projects-container{
+    margin-top: 100px;
+}
+
+.about-me-container,
+.projects-container,
+.contact-container {
+  scroll-margin-top: 30px;
+}
+
+
+@media  (max-width: 768px) {  
+    .introContainer{
+      display: flex;
+      flex-direction: column;
+      padding: 0 0;
+      gap: 5em;
+      align-items: center;
+    }
+    .custom-animated-text{
+      max-width: 100%;
+    }
+    .stacksCarousel{
+        justify-self: center;
+        margin-top: 40px;
+        max-width: 100%;
+    }
+    .about-me-container{
+        justify-self: center;
+        margin-top: 50px;
+        max-width: 100%;
+    }
+    .contact-container{
+        margin-top: 50px;
+     margin-bottom: 150px;   
+    }
+    .projects-container{
+        margin-top: 50px;
+    }
+  }
