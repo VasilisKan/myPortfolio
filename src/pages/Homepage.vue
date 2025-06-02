@@ -7,6 +7,7 @@ import ContactMe from './../components/ContactMe.vue'
 import Projects from './../components/ProjectsList.vue' 
 import Header from './../components/Header.vue' 
 import FooterComp from './../components/FooterComp.vue' 
+
 defineOptions({
   name: 'MyHomepage'
 })

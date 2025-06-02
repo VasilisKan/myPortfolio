@@ -33,46 +33,47 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { useAuth } from '@/composables/useAuth';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue'
+import { useAuthStore } from './../stores/authStore'
+import { useRouter } from 'vue-router'
 
 const emit = defineEmits<{
   (e: 'close'): void;
-}>();
+}>()
 
-const router = useRouter();
-const { login } = useAuth();
+const router = useRouter()
+const authStore = useAuthStore()
 
-const email    = ref('');
-const password = ref('');
-const loading  = ref(false);
-const error    = ref<string|null>(null);
+const email    = ref('')
+const password = ref('')
+const loading  = ref(false)
+const error    = ref<string|null>(null)
 
 function close() {
-  emit('close');
-  error.value = null;
+  emit('close')
+  error.value = null
 }
 
 async function onSubmit() {
-  loading.value = true;
-  error.value = null;
+  loading.value = true
+  error.value = null
 
   try {
-    await login(email.value, password.value);
+    await authStore.login(email.value, password.value)
 
     // Refresh to homepage
-    close();
+    close()
     router.push('/').then(() => {
-      window.location.reload();
-    });
+      window.location.reload()
+    })
   } catch (e: any) {
-    error.value = e.message;
+    error.value = e.message
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 </script>
+
 
 <style scoped>
 .login-overlay {
