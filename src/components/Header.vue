@@ -1,34 +1,50 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import LoginPopup from './LoginPopup.vue';
 import { useAuth } from '@/composables/useAuth';
-
-const { isLoggedIn, logout } = useAuth();
-
-const menuItems = [
-  { name: 'About',    href: '#about' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Contact',  href: '#contact' },
-];
-
+import { useRouter } from 'vue-router';
 import githubIcon from '../assets/github.webp';
 import linkedinIcon from '../assets/linkedIn.webp';
 import emailIcon from '../assets/instagram.webp';
 
-const socialLinks = [
-  { name: 'GitHub',    href: 'https://github.com/VasilisKan',          icon: githubIcon },
-  { name: 'LinkedIn',  href: 'https://www.linkedin.com/in/vkanellos', icon: linkedinIcon },
-  { name: 'Instagram', href: 'mailto:vasilis@kanellos.me',             icon: emailIcon },
-];
+const { isLoggedIn, login, logout, fetchMe } = useAuth();
+const router = useRouter();
 
-const showMenu  = ref(false);
+const showMenu = ref(false);
 const showLogin = ref(false);
 
-function toggleMenu()   { showMenu.value = !showMenu.value; }
-function openLogin()    { showLogin.value = true; showMenu.value = false; }
-function closeLogin()   { showLogin.value = false; }
-function handleLogout() { logout(); showMenu.value = false; }
+onMounted(() => {
+  fetchMe().catch(() => console.warn('Failed to fetch user info.'));
+});
+
+const menuItems = [
+  { name: 'About', href: '#about' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Contact', href: '#contact' },
+];
+
+const socialLinks = [
+  { name: 'GitHub', href: 'https://github.com/VasilisKan', icon: githubIcon },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/vkanellos', icon: linkedinIcon },
+  { name: 'Instagram', href: 'mailto:vasilis@kanellos.me', icon: emailIcon },
+];
+
+function toggleMenu() { showMenu.value = !showMenu.value; }
+function openLogin() { showLogin.value = true; showMenu.value = false; }
+function closeLogin() { showLogin.value = false; }
+
+async function handleLogout() {
+  try {
+    await logout();  
+  } catch (error) {
+    console.error('Logout failed:', error);
+  } finally {
+    showMenu.value = false;
+    router.push('/').then(() => window.location.reload());
+  }
+}
 </script>
+
 
 <template>
   <div class="headerContainer">
@@ -81,7 +97,7 @@ function handleLogout() { logout(); showMenu.value = false; }
 
 <style scoped>
 .headerContainer {
-  position: relative; width: 100%; margin-top: 30px;
+  position: relative; width: 100%; margin-top: 30px; margin-bottom: 130px;
   display: flex; justify-content: space-between; align-items: center;
   padding: 0 20px;
   background: rgba(20,20,20,0.5); backdrop-filter: blur(12px);

@@ -1,14 +1,13 @@
 import { ref, computed } from 'vue';
 
-const API_BASE = (import.meta.env.VITE_BACKEND_URL as string) 
+const API_BASE = import.meta.env.VITE_BACKEND_URL as string;
 
-interface MeResponse { userId: string }
+interface MeResponse { userId: string; isAdmin: boolean }
 
 const user = ref<MeResponse | null>(null);
 const isLoggedIn = computed(() => user.value !== null);
 
 export function useAuth() {
-  // Fetch /me but suppress the 401 noise
   async function fetchMe() {
     try {
       const res = await fetch(`${API_BASE}/api/Auth/me`, {
@@ -24,13 +23,12 @@ export function useAuth() {
     }
   }
 
-  // Login: POST /login (sets HttpOnly cookie), then re-fetch /me
   async function login(email: string, password: string) {
     const res = await fetch(`${API_BASE}/api/Auth/login`, {
-      method:      'POST',
+      method: 'POST',
       credentials: 'include',
-      headers:     { 'Content-Type': 'application/json' },
-      body:        JSON.stringify({ email, passwordHash: password }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: password }),
     });
     if (!res.ok) {
       const text = await res.text().catch(() => res.statusText);
@@ -39,12 +37,23 @@ export function useAuth() {
     await fetchMe();
   }
 
-  // Logout: POST /logout (clears cookie), then clear local state
   async function logout() {
-    await fetch('https://localhost:5001/api/Auth/logout', {
-      method:      'POST',
-      credentials: 'include',
-    });
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Accept': '*/*' },
+      body: '',
+      credentials: 'include', 
+    };
+  
+    console.log('Sending logout request:', `${API_BASE}/api/Auth/logout`, requestOptions);
+    debugger; // Pause here for inspection in DevTools
+  
+    const res = await fetch(`${API_BASE}/api/Auth/logout`, requestOptions);
+  
+    if (!res.ok) {
+      console.warn(`Logout failed with status ${res.status}`);
+    }
+  
     user.value = null;
   }
 

@@ -35,11 +35,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useAuth } from '@/composables/useAuth';
+import { useRouter } from 'vue-router';
 
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
+const router = useRouter();
 const { login } = useAuth();
 
 const email    = ref('');
@@ -54,11 +56,16 @@ function close() {
 
 async function onSubmit() {
   loading.value = true;
-  error.value   = null;
+  error.value = null;
 
   try {
     await login(email.value, password.value);
+
+    // Refresh to homepage
     close();
+    router.push('/').then(() => {
+      window.location.reload();
+    });
   } catch (e: any) {
     error.value = e.message;
   } finally {

@@ -1,15 +1,17 @@
 // main.ts
 import './assets/main.css';
 import { createApp } from 'vue';
-import App         from './App.vue';
+import App from './App.vue';
+import router from './router';
 import { useAuth } from '@/composables/useAuth';
 
 const app  = createApp(App);
 const auth = useAuth();
 
-// Fire‐and‐forget the /me check, but catch any 401
+app.use(router); 
+
 auth.fetchMe().catch(() => {
-  // ignore; user simply isn’t logged in yet
+ 
 });
 
 declare global {
