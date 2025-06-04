@@ -10,7 +10,6 @@ import iphone       from './../assets/equipmentPhoto/iphone14plus.webp'
 import mxmaster     from './../assets/equipmentPhoto/mxmaster3s.webp'
 import mxmechanical from './../assets/equipmentPhoto/mxmechanicalmini.webp'
 
-// ← Make sure you have defined this in .env.local as VITE_MAPBOX_TOKEN
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string
 
 onMounted(() => {
@@ -22,7 +21,6 @@ onMounted(() => {
       scrollWheelZoom: false
     }).setView([38.2466, 21.7346], 3.4)
 
-    // pass the token via the `accessToken` property:
     const glLayer = (L as any).mapboxGL({
       style:  'mapbox://styles/vasiliskan01/cm9g7rm1100me01s4b0lh7yg0',
       accessToken: MAPBOX_TOKEN

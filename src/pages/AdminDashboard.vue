@@ -49,32 +49,36 @@ const activeComponent = computed(() => {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  background-color: #25282d;
+  background-color: #787878;
 }
 .sidebar-wrapper {
   width: clamp( 250px, 20vw, 300px);
-  background-color: #2e363f;
+  background-color: #202020;
   height: 100%;
 }
 
 .dashboard-main-wrapper{
   flex:1 ;
 }
+
 .dashboard-header{
-  padding: 30px;
+  background-color: #2020206c;
+  padding: 20px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: white;
 }
+
 .dashboard-main-wrapper .categoryName{
   font-size: 1.8em;
   font-weight: 700;
   color: #f0f0f0;
 }
+
 .loged-in-user{
   display: inline-flex;
-  border: 1px solid #3a3f45;
+  border: 3px solid #e7e7e73f;
   border-radius: 1em;
   align-items: center;
   gap: 10px;

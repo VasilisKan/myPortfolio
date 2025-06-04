@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
-// Word list with beautiful blue tones
 const headerWords = [
   { text: "Scalable", color: "#00C9FF" },
   { text: "Reliable", color: "#2F80ED" },

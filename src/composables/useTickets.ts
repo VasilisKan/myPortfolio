@@ -9,6 +9,7 @@ interface Ticket {
   description: string
   status: string
   createdAt: string
+  userEmail: string
 }
 
 export function useTickets() {
@@ -21,7 +22,7 @@ export function useTickets() {
     error.value = null
     try {
       const response = await axios.get(`${API_BASE}/ticket/TicketSubmit/get`, {
-        withCredentials: true // Ensures cookies are sent, if needed for auth
+        withCredentials: true 
       })
       tickets.value = response.data
     } catch (err: any) {

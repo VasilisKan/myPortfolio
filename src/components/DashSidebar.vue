@@ -13,7 +13,7 @@ export default {
     emits: ['update-active'],  
     data() {
         return {
-            activeItem: 'Dashboard', 
+            activeItem: 'Tickets', 
             mainMenu: [
                 {
                     category: 'Main Menu',
@@ -35,7 +35,6 @@ export default {
     }
 };
 </script>
-
 
 <template>
     <div class="sidebar-wrap">
@@ -73,7 +72,7 @@ export default {
     margin-top: 30px;
     margin-bottom: 10px;
     font-weight: 700;
-    color: #aaa;
+    color: #b3b3b3;
     font-size: 18px;
 }
 .menu-item {
@@ -90,7 +89,7 @@ export default {
 
 .menu-icon {
     font-size: 20px;
-    color: grey; 
+    color: b3b3b3; 
     transition: color 0.3s;
     margin-right: 20px;
 }
@@ -105,6 +104,6 @@ export default {
 .menu-item.active,
 .menu-item:hover {
     border-right: 1px solid #29cdff; 
-    background: linear-gradient(to right, #4ae4ff00, #64eef817);
+    background: linear-gradient(to right, #4ae4ff00, #1D8BF117);
 }
 </style>

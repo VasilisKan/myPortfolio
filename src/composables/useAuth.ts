@@ -46,7 +46,7 @@ export function useAuth() {
     };
   
     console.log('Sending logout request:', `${API_BASE}/api/Auth/logout`, requestOptions);
-    debugger; // Pause here for inspection in DevTools
+    debugger;
   
     const res = await fetch(`${API_BASE}/api/Auth/logout`, requestOptions);
   

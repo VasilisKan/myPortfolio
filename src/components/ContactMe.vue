@@ -5,10 +5,8 @@ import { faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import emailjs from 'emailjs-com'
 
-// register the icon
 library.add(faEnvelopeOpenText)
 
-// pull your EmailJS credentials from Vite env
 const SERVICE_ID   = import.meta.env.VITE_EMAILJS_SERVICE_ID   as string
 const TEMPLATE_ID  = import.meta.env.VITE_EMAILJS_TEMPLATE_ID  as string
 const PUBLIC_KEY   = import.meta.env.VITE_EMAILJS_PUBLIC_KEY   as string
@@ -35,7 +33,6 @@ const handleSubmit = async () => {
   submitError.value   = ''
 
   try {
-    // initialize EmailJS once
     emailjs.init(PUBLIC_KEY)
 
     const response = await emailjs.send(
@@ -68,7 +65,6 @@ const handleSubmit = async () => {
 }
 </script>
 
-<!-- src/components/ContactMe.vue -->
 <template>
   <div class="contact-card">
     <h2 class="form-title">
