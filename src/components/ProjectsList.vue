@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 
 interface Project {
   title: string
@@ -10,6 +11,13 @@ interface Project {
 }
 
 const projects = ref<Project[]>([
+  {
+    title: "PhotoLock",
+    description: "A community app for photographers to share and discover unique photoshoot locations, built for a fast and intuitive experience.",
+    tags: ["AWS", "Supabase", "React Native"],
+    coverPhoto: new URL('../assets/projectPhoto/photolockCover.png', import.meta.url).href,
+    link: "/projects/photolock"
+  },
   {
     title: "Under Construction 🚧",
     description: "This project is currently being built with blood, sweat, and excessive caffeine. Check back before the heat death of the universe.",
@@ -31,13 +39,6 @@ const projects = ref<Project[]>([
     coverPhoto: new URL('../assets/projectPhoto/placeholderPhoto.webp', import.meta.url).href,
     link: "#"
   },
-  {
-    title: "The Schrödinger's Project 🐱",
-    description: "Both amazing and non-existent until you observe it. Quantum mechanics guarantees it’ll be cool... probably.",
-    tags: ["Paradox", "Uncertainty", "Vue?"],
-    coverPhoto: new URL('../assets/projectPhoto/placeholderPhoto.webp', import.meta.url).href,
-    link: "#"
-  }
 ])
 
 const rows = computed(() => {
@@ -79,8 +80,23 @@ const rows = computed(() => {
             <div class="tags">
               <span v-for="(tag, tagIndex) in project.tags" :key="tagIndex">{{ tag }}</span>
             </div>
-            <a v-if="project.link" :href="project.link" class="project-link">
-              View Project →
+            <RouterLink
+              v-if="project.link && project.link.startsWith('/')"
+              :to="project.link"
+              class="project-link"
+            >
+              <span class="project-link__text">View Project</span>
+              <span class="project-link__arrow" aria-hidden="true">→</span>
+            </RouterLink>
+            <a
+              v-else-if="project.link"
+              :href="project.link"
+              class="project-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="project-link__text">View Project</span>
+              <span class="project-link__arrow" aria-hidden="true">→</span>
             </a>
           </div>
         </div>
@@ -239,15 +255,41 @@ const rows = computed(() => {
   font-size: 0.9rem;
   font-weight: 500;
   transition: all 0.3s ease;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
-.project-link:hover {
-  color: #92fe9d;
-  transform: translateX(5px);
+
+
+/* .project-link__text:hover {
+  color: #56ffd6;
 }
+
+.project-link__text:hover + .project-link__arrow {
+  transform: translateX(2px);
+  color: #56ffd6;
+} */
+
+/* stop any global anchor-hover color/underline here */
+.project-card .project-link,
+.project-card .project-link:hover {
+  color: #00c9ff;            /* or inherit */
+  text-decoration: none;
+}
+
+.project-link__arrow {
+  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+/* .project-link:hover .project-link__arrow {
+  transform: translateX(2px);
+} */
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

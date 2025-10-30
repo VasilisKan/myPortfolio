@@ -1,12 +1,13 @@
 .homepage-container {
   width: 100%;
-  max-width: min(70%, 1200px);
-  margin: 0 auto; 
-  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
+  align-items: stretch;
+  justify-content: flex-start;
+  position: relative;
 }
 
 header,footer{
@@ -15,48 +16,54 @@ header,footer{
 
 .introContainer {
     display: flex;
-    padding: 0px 3em;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(2rem, 6vw, 5rem);
+    padding: 0 clamp(1.5rem, 6vw, 3rem);
 }
 
 .introContainer > * {
-    align-items: center;
+    flex: 1 1 320px;
 }
-.custom-animated-text{
-max-width: 70%;
+.custom-animated-text {
+    max-width: 600px;
+    flex: 1 1 360px;
 }
 
 .personalPhoto {
     display: flex;
-    flex: 1;
-    justify-content: flex-end;
+    flex: 0 1 320px;
+    justify-content: center;
     align-items: center;
 }
 
 footer {
     position: relative; 
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
   
   .bottomGradient {
     position: absolute;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    width: min(1400px, 120vw);
     z-index: -1;
-    transform: rotate(180deg);
+    transform: translateX(-50%) rotate(180deg);
+    pointer-events: none;
   }
   
   .bottomGradient img {
     width: 100%;
+    height: auto;
     object-fit: cover;
     pointer-events: none;
     display: block;
   }
 
 .personalPhoto img {
-    height: 200px;
-    width: auto;
+    width: clamp(180px, 26vw, 260px);
+    height: auto;
     border-radius: 100%; 
     box-shadow: 2px 4px 12px rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -68,21 +75,23 @@ footer {
 .stacksCarousel{
     justify-self: center;
     margin-top: 120px;
-    max-width: 90%;
+    width: 100%;
 }
 .about-me-container{
+    width: 100%;
     justify-self: center;
     margin-top: 120px;
-    max-width: 95%;
 }
 
 .contact-container{
     margin-top: 100px;
- margin-bottom: 150px;   
+    width: 100%;
+    margin-bottom: 150px;   
 }
 
 .projects-container{
     margin-top: 100px;
+    width: 100%;
 }
 
 .about-me-container,
@@ -96,6 +105,7 @@ footer {
     left: 0;
     width: 100%;
     z-index: -1;
+    pointer-events: none;
   }
   .topGradient img {
     width: 100%;
@@ -105,15 +115,39 @@ footer {
   }
 
 @media  (max-width: 768px) {  
-    .introContainer{
-      display: flex;
-      flex-direction: column;
-      padding: 0 0;
-      gap: 5em;
-      align-items: center;
+    .homepage-container {
+      padding-left: 1.4rem;
+      padding-right: 1.4rem;
     }
-    .custom-animated-text{
-      max-width: 100%;
+.introContainer {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1.1rem;
+    gap: clamp(4rem, 2vw, 0.4rem);
+  }
+
+  /* Kill the desktop flex-basis on children */
+  .introContainer > * {
+    flex: 0 0 auto;   /* no growth, no shrink, height = content */
+    width: 100%;
+  }
+
+  /* Explicitly reset the animated text block */
+  .custom-animated-text {
+    flex: 0 0 auto;   /* removes the 360px basis */
+    max-width: 100%;
+    width: auto;
+    padding: 0;
+  }
+
+  /* Your existing photo overrides are fine, but make sure basis is gone */
+  .personalPhoto {
+    flex: 0 0 auto;
+    margin-top: 0.1rem;
+  }
+
+    .personalPhoto img{
+        width: clamp(160px, 48vw, 220px);
     }
     .stacksCarousel{
         justify-self: center;
@@ -127,7 +161,7 @@ footer {
     }
     .contact-container{
         margin-top: 50px;
-     margin-bottom: 150px;   
+        margin-bottom: 0;
     }
     .projects-container{
         margin-top: 50px;

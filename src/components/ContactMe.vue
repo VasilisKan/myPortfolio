@@ -7,9 +7,13 @@ import emailjs from 'emailjs-com'
 
 library.add(faEnvelopeOpenText)
 
-const SERVICE_ID   = import.meta.env.VITE_EMAILJS_SERVICE_ID   as string
-const TEMPLATE_ID  = import.meta.env.VITE_EMAILJS_TEMPLATE_ID  as string
-const PUBLIC_KEY   = import.meta.env.VITE_EMAILJS_PUBLIC_KEY   as string
+const SERVICE_ID_RAW   = import.meta.env.VITE_EMAILJS_SERVICE_ID   as string | undefined
+const TEMPLATE_ID_RAW  = import.meta.env.VITE_EMAILJS_TEMPLATE_ID  as string | undefined
+const PUBLIC_KEY_RAW   = import.meta.env.VITE_EMAILJS_PUBLIC_KEY   as string | undefined
+
+const SERVICE_ID  = SERVICE_ID_RAW?.trim() || ''
+const TEMPLATE_ID = TEMPLATE_ID_RAW?.trim() || ''
+const PUBLIC_KEY  = PUBLIC_KEY_RAW?.trim() || ''
 
 const name         = ref('')
 const email        = ref('')
@@ -18,6 +22,10 @@ const message      = ref('')
 const isSubmitting = ref(false)
 const submitSuccess= ref(false)
 const submitError  = ref('')
+const isEmailConfigured =
+  SERVICE_ID.length > 0 &&
+  TEMPLATE_ID.length > 0 &&
+  PUBLIC_KEY.length > 0
 
 const roles = [
   '🌟 Curious human',
@@ -32,9 +40,14 @@ const handleSubmit = async () => {
   isSubmitting.value = true
   submitError.value   = ''
 
+  if (!isEmailConfigured) {
+    submitError.value = 'Contact form temporarily unavailable. Please email me directly at vasilis@kanellos.me.'
+    isSubmitting.value = false
+    return
+  }
+
   try {
     emailjs.init(PUBLIC_KEY)
-
     const response = await emailjs.send(
       SERVICE_ID,
       TEMPLATE_ID,
@@ -58,7 +71,11 @@ const handleSubmit = async () => {
 
   } catch (err:any) {
     console.error('EmailJS error:', err)
-    submitError.value = err.message || 'Failed to send message'
+    const msg =
+      typeof err?.text === 'string' && err.text.trim().length
+        ? err.text
+        : err?.message || 'Failed to send message'
+    submitError.value = msg
   } finally {
     isSubmitting.value = false
   }
@@ -140,6 +157,8 @@ const handleSubmit = async () => {
         src="@/assets/curved-arrow.webp"
         alt="Decorative arrow"
         class="rounded-arrow-svg"
+        loading="lazy"
+        decoding="async"
       />
     </div>
   </div>
@@ -149,6 +168,7 @@ const handleSubmit = async () => {
 <style scoped>
 
 .contact-card {
+  width: 100%;
   position: relative;
   margin: 100px 50px;
   border-top: 1px solid #ffffff22;
@@ -157,44 +177,45 @@ const handleSubmit = async () => {
 }
 
 .form-icon {
-  font-size: 22px;
+  font-size: 28px;
   color: #00c9ff;
 }
 
 .form-title {
   margin: 40px 20px;
   text-align: center;
-  font-size: 32px;
-  color: #e0e0e0;
+  font-size: 40px;
+  color: #f2f4f8;
   font-weight: 700;
   position: relative;
+  letter-spacing: 0.5px;
 }
 
 .form-title::after {
   content: "";
   display: block;
-  margin: 0.4rem auto 0;
-  width: 60px;
-  height: 2px;
-  background-color: #ffffff22;
+  margin: 0.6rem auto 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, rgba(0, 201, 255, 0.4), rgba(146, 254, 157, 0.4));
 }
 
 .contact-form {
   justify-self: left;
-  width: 70%;
+  width: 82%;
   margin: 0 auto;
 }
 
 .form-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 700px;
-  margin: 60px auto;
-  padding: 32px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 3px rgba(255, 255, 255, 0.08);
+  gap: 24px;
+  max-width: 800px;
+  margin: 70px auto;
+  padding: 40px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
   transition: box-shadow 0.3s ease;
 }
@@ -271,14 +292,24 @@ button:disabled {
 
 .rounded-arrow {
   position: absolute;
-  bottom: -15em;
-  right: -9em;
-  z-index: -1;
+  right: -3rem;
+  bottom: -14rem;
+  transform: rotate(-4deg);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .rounded-arrow img {
-  width: 450px;
+  width: clamp(220px, 22vw, 440px);
   height: auto;
+  transition: width 0.3s ease;
+}
+
+@media (min-width: 1400px) {
+  .rounded-arrow {
+    right: -4rem;
+    bottom: -16rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -287,7 +318,24 @@ button:disabled {
   }
   
   .contact-form {
-    width: 90%;
+    width: 94%;
+  }
+  
+  .form-wrapper {
+    padding: 32px;
+    margin: 50px auto;
+  }
+  
+  .form-title {
+    font-size: 32px;
+  }
+
+
+}
+
+@media (max-width: 480px) {
+  .contact-card {
+    margin: 80px 0px 40px;
   }
   
   .form-wrapper {
@@ -297,34 +345,25 @@ button:disabled {
   
   .form-title {
     font-size: 28px;
-  }
-}
-
-@media (max-width: 480px) {
-  .contact-card {
-    margin: 80px 0px 40px;
-  }
-  
-  .form-wrapper {
-    padding: 20px;
-    margin: 30px auto;
-  }
-  
-  .form-title {
-    font-size: 24px;
     margin: 30px 15px;
   }
   
   .rounded-arrow {
-  position: absolute;
-  bottom: -12em;
-  right: 0;
-  z-index: -1;
+    position: static;
+    transform: none;
+    margin-top: -4rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .rounded-arrow img {
+    width: min(60vw, 260px);
+  }
 }
 
-.rounded-arrow img {
-  width: 250px;
-  height: auto;
-}
+@media (max-width: 360px) {
+  .rounded-arrow img {
+    width: min(70vw, 200px);
+  }
 }
 </style>

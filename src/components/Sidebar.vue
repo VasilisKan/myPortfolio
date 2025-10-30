@@ -1,29 +1,37 @@
 <script lang="ts" setup>
-defineOptions({ name: 'MySidebar' })
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import * as brands from '@fortawesome/free-brands-svg-icons'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+
+defineOptions({ name: 'MySidebar' })
 
 library.add(
   brands.faGithub,
-  brands.faFacebook,
+  brands.faLinkedin,
   brands.faInstagram,
-  brands.faXTwitter,
+  faEnvelope,
 )
 
 const socialData = [
-  { link: "https://github.com/VasilisKan", icon: ['fab', 'github'] },
-  { link: "#", icon: ['fab', 'facebook'] },
-  { link: "#", icon: ['fab', 'instagram'] },
-  { link: "#", icon: ['fab', 'x-twitter'] },
+  { label: 'GitHub', link: 'https://github.com/VasilisKan', icon: ['fab', 'github'] },
+  { label: 'LinkedIn', link: 'https://www.linkedin.com/in/vkanellos', icon: ['fab', 'linkedin'] },
+  { label: 'Instagram', link: 'https://www.instagram.com/vasilis.kanelos', icon: ['fab', 'instagram'] },
+  { label: 'Email', link: 'mailto:vasilis@kanellos.me', icon: ['fas', 'envelope'] },
 ]
 </script>
 
 <template>
   <div class="sidebar-wrapper">
     <ul class="icon-only-list">
-      <li v-for="(item, index) in socialData" :key="index">
-        <a :href="item.link" target="_blank" rel="noopener noreferrer" class="icon-only-link">
+      <li v-for="item in socialData" :key="item.label">
+        <a
+          :href="item.link"
+          target="_blank"
+          rel="noopener noreferrer"
+          :aria-label="item.label"
+          class="icon-only-link"
+        >
           <font-awesome-icon :icon="item.icon" class="icon" />
         </a>
       </li>
@@ -41,8 +49,8 @@ const socialData = [
   backdrop-filter: blur(8px);
   border-top-left-radius: 12px;  
   border-bottom-left-radius: 12px; 
-  padding: 10px 4px;
-  width: 60px;
+  padding: 14px 6px;
+  width: 72px;
   box-shadow: -2px 4px 12px rgba(255, 255, 255, 0.08); 
   border: 1px solid rgba(255, 255, 255, 0.05);
   z-index: 999;
@@ -60,8 +68,8 @@ const socialData = [
 }
 
 .icon-only-link {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background-color: rgba(38, 38, 38, 0.8);
   display: flex;
@@ -78,7 +86,7 @@ const socialData = [
 }
 
 .icon {
-  font-size: 15px;
+  font-size: 18px;
   color: white;
   transition: color 0.3s ease;
 }
@@ -90,24 +98,24 @@ const socialData = [
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .sidebar-wrapper {
-    width: 56px;
-    padding: 8px 3px;
+    width: 64px;
+    padding: 10px 4px;
   }
   
   .icon-only-link {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
   }
   
   .icon {
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
 @media (max-width: 768px) {
   .sidebar-wrapper {
     margin-top: 10px;
-    width: 60px;
+    width: 58px;
     padding: 6px 2px;
   }
   
@@ -117,7 +125,7 @@ const socialData = [
   }
   
   .icon {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 

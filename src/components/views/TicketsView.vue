@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed } from 'vue'
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 import { useTicketStore } from './../../stores/ticketsStore'
 
 const ticketStore = useTicketStore()
@@ -7,7 +9,12 @@ const selectedTicketId = ref<number | null>(null)
 
 const nameFilter = ref('')
 const categoryFilter = ref('')
-const dateRangeFilter = ref<[Date | null, Date | null]>([null, null])
+
+const today = new Date()
+today.setHours(23, 59, 59, 999) 
+const defaultStartDate = new Date(2025, 0, 1)
+defaultStartDate.setHours(0, 0, 0, 0)
+const dateRangeFilter = ref<[Date, Date]>([defaultStartDate, today])
 
 onMounted(() => {
   ticketStore.loadOpenTickets()
@@ -34,19 +41,15 @@ const filteredTickets = computed(() => {
     if (nameFilter.value && !ticket.userEmail.toLowerCase().includes(nameFilter.value.toLowerCase())) {
       return false
     }
-    
     if (categoryFilter.value && ticket.category !== categoryFilter.value) {
       return false
     }
-    
     if (dateRangeFilter.value[0] || dateRangeFilter.value[1]) {
       const ticketDate = new Date(ticket.createdAt)
       const [startDate, endDate] = dateRangeFilter.value
-      
       if (startDate && ticketDate < startDate) return false
       if (endDate && ticketDate > endDate) return false
     }
-    
     return true
   })
 })
@@ -54,7 +57,8 @@ const filteredTickets = computed(() => {
 const clearFilters = () => {
   nameFilter.value = ''
   categoryFilter.value = ''
-  dateRangeFilter.value = [null, null]
+  // Reset to 01-01-2025 to Today
+  dateRangeFilter.value = [defaultStartDate, today]
 }
 </script>
 
@@ -62,7 +66,7 @@ const clearFilters = () => {
   <div class="tickets-view">
     <div class="filters-wrapper">
       <div class="filter-group">
-        <label for="name-filter">Filter by Name:</label>
+        <label for="name-filter">Name:</label>
         <select id="name-filter" v-model="nameFilter">
           <option value="">All Names</option>
           <option v-for="name in uniqueNames" :key="name" :value="name">
@@ -71,7 +75,7 @@ const clearFilters = () => {
         </select>
       </div>
       <div class="filter-group">
-        <label for="category-filter">Filter by Category:</label>
+        <label for="category-filter">Category:</label>
         <select id="category-filter" v-model="categoryFilter">
           <option value="">All Categories</option>
           <option v-for="category in uniqueCategories" :key="category" :value="category">
@@ -81,22 +85,16 @@ const clearFilters = () => {
       </div>
       
       <div class="filter-group">
-        <label>Date Range:</label>
-        <div class="date-range-inputs">
-          <input 
-            type="date" 
-            v-model="dateRangeFilter[0]" 
-            placeholder="From date"
-            class="date-input"
-          >
-          <span>to</span>
-          <input 
-            type="date" 
-            v-model="dateRangeFilter[1]" 
-            placeholder="To date"
-            class="date-input"
-          >
-        </div>
+        <label>Date:</label>
+          <Datepicker
+            v-model="dateRangeFilter"
+            range
+            :enable-time-picker="false"
+            :clearable="true"
+            dark
+            placeholder="Select date range"
+            input-class="date-input"
+          />
       </div>
       
       <button class="clear-filters" @click="clearFilters">
@@ -107,7 +105,10 @@ const clearFilters = () => {
     <div v-if="ticketStore.loading">Loading ...</div>
     <div v-else-if="ticketStore.error">{{ ticketStore.error }}</div>
     <div v-else class="table-container">
-      <table class="tickets-table">
+      <div v-if="filteredTickets.length === 0" class="no-tickets-message">
+        No tickets found for the selected filters.
+      </div>
+      <table v-else class="tickets-table">
         <thead>
           <tr>
             <th>A/A</th>
@@ -150,6 +151,7 @@ const clearFilters = () => {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
+    align-items: center;
     gap: 1.5rem;
     width: 95%;
     padding: 1.5rem;
@@ -161,8 +163,9 @@ const clearFilters = () => {
 
 .filter-group {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
+    align-items: center;
 }
 
 .filter-group label {
@@ -251,7 +254,7 @@ const clearFilters = () => {
   padding: 25px 20px;
   text-align: left;
   border: none;
-  font-weight: 500;
+  font-weight: 600;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -260,6 +263,7 @@ const clearFilters = () => {
   color: #ffffff;
   text-transform: uppercase;
   font-size: 16px;
+  font-weight: 700;
   border-radius: 12px;
 }
 
@@ -285,6 +289,49 @@ const clearFilters = () => {
   font-weight: 600;
   font-size: 18px;
   color: #ffffff; 
+}
+
+.no-tickets-message {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  background-color: #2b2b2b;
+  border-radius: 12px;
+  color: #a0a0a0;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+@media (max-width: 1024px) {
+  .filters-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .filter-group {
+    width: 100%;
+  }
+
+  .filter-group select,
+  .date-input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .tickets-table th,
+  .tickets-table td {
+    padding: 20px 15px;
+    font-size: 14px;
+  }
+
+  .clear-filters {
+    margin-left: 0;
+    align-self: stretch;
+    width: 100%;
+  }
 }
 
 @media (max-width: 768px) {

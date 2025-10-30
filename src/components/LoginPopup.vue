@@ -34,15 +34,10 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useAuthStore } from './../stores/authStore'
-import { useRouter } from 'vue-router'
 
 const emit = defineEmits<{
   (e: 'close'): void;
 }>()
-
-const router = useRouter()
-const authStore = useAuthStore()
 
 const email    = ref('')
 const password = ref('')
@@ -52,25 +47,13 @@ const error    = ref<string|null>(null)
 function close() {
   emit('close')
   error.value = null
+  email.value = ''
+  password.value = ''
 }
 
 async function onSubmit() {
-  loading.value = true
-  error.value = null
-
-  try {
-    await authStore.login(email.value, password.value)
-
-    // Refresh to homepage
-    close()
-    router.push('/').then(() => {
-      window.location.reload()
-    })
-  } catch (e: any) {
-    error.value = e.message
-  } finally {
-    loading.value = false
-  }
+  loading.value = false
+  error.value = 'Sign-in is paused while the alpha rolls out. Drop me a note and I\'ll get you onboarded manually.'
 }
 </script>
 
