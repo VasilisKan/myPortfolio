@@ -21,7 +21,7 @@ jobs:
           ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new "${DEPLOY_USER}@${DEPLOY_HOST}" "
             cd ${DEPLOY_PATH} &&
-            git pull origin main &&
+            git fetch origin main && git reset --hard origin/main &&
             docker compose build --no-cache vue-app &&
             docker compose up -d vue-app
           "
