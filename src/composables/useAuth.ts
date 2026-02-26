@@ -1,6 +1,5 @@
 import { ref, computed } from 'vue';
-
-const API_BASE = import.meta.env.VITE_BACKEND_URL as string;
+import { API_BASE } from '../config';
 
 export interface MeResponse { userId: string; isAdmin: boolean; email?: string; name?: string; username?: string }
 

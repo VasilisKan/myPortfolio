@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-
-const API_BASE = import.meta.env.VITE_BACKEND_URL
+import { API_BASE } from '../config'
 
 interface User {
   email: string

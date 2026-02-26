@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL
+import { API_BASE } from '../config'
 const DEMOS_BASE = `${API_BASE}/api/demos`
 const fetchConfig = { credentials: 'include' as RequestCredentials }
 

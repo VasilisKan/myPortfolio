@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL
+import { API_BASE } from '../config'
 const SHOWCASE_BASE =
   typeof import.meta.env.VITE_SHOWCASE_API_URL === 'string' &&
   import.meta.env.VITE_SHOWCASE_API_URL !== ''

@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL
+import { API_BASE } from '../config'
 
 interface Ticket {
   id: string

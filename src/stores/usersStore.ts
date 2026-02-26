@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL
+import { API_BASE } from '../config'
 const AUTH_USERS =
   typeof import.meta.env.VITE_AUTH_USERS_URL === 'string' &&
   import.meta.env.VITE_AUTH_USERS_URL !== ''

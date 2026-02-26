@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL
+import { API_BASE } from '../config'
 const CLOUDFLARE_BASE = `${API_BASE}/api/cloudflare/analytics`
 
 export interface CloudflareDashboardQuery {
