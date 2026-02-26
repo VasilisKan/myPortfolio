@@ -3,60 +3,173 @@
     <div class="login-popup-wrapper">
       <button class="close-btn" @click="close()">×</button>
       <div class="logo">VK</div>
-      <h2>Welcome back</h2>
-      <p class="subtitle">Sign in to continue</p>
 
-      <form @submit.prevent="onSubmit">
-        <div class="input-group">
-          <input v-model="email" type="email" placeholder=" " required />
-          <label>Email</label>
-        </div>
+      <!-- Sign in -->
+      <template v-if="mode === 'signin'">
+        <h2>Welcome back</h2>
+        <p class="subtitle">Sign in to continue</p>
+        <form @submit.prevent="onSignIn">
+          <div class="input-group">
+            <input v-model="email" type="email" placeholder=" " required />
+            <label>Email</label>
+          </div>
+          <div class="input-group">
+            <input v-model="password" type="password" placeholder=" " required />
+            <label>Password</label>
+          </div>
+          <button type="submit" class="signin-btn" :disabled="loading">
+            <span v-if="loading">Signing in…</span>
+            <span v-else>Sign In</span>
+          </button>
+          <p v-if="error" class="error">{{ error }}</p>
+        </form>
+        <p class="footer-text">
+          <a href="#" @click.prevent="mode = 'forgot'">Forgot password?</a>
+        </p>
+      </template>
 
-        <div class="input-group">
-          <input v-model="password" type="password" placeholder=" " required />
-          <label>Password</label>
-        </div>
+      <!-- Forgot password -->
+      <template v-else-if="mode === 'forgot'">
+        <h2>Reset password</h2>
+        <p class="subtitle">Enter your email to receive a reset link</p>
+        <form v-if="!forgotSuccess" @submit.prevent="onForgotPassword">
+          <div class="input-group">
+            <input v-model="email" type="email" placeholder=" " required />
+            <label>Email</label>
+          </div>
+          <button type="submit" class="signin-btn" :disabled="loading">
+            <span v-if="loading">Sending…</span>
+            <span v-else>Send reset link</span>
+          </button>
+          <p v-if="error" class="error">{{ error }}</p>
+        </form>
+        <template v-else>
+          <p class="success-msg">
+            If an account exists for this email, you will receive a password reset link shortly.
+          </p>
+          <p class="success-msg success-hint">Check your inbox and use the link to set a new password.</p>
+        </template>
+        <p class="footer-text">
+          <a href="#" @click.prevent="switchToSignIn">Back to sign in</a>
+        </p>
+      </template>
 
-        <button type="submit" class="signin-btn" :disabled="loading">
-          <span v-if="loading">Signing in…</span>
-          <span v-else>Sign In</span>
-        </button>
-
-        <p v-if="error" class="error">{{ error }}</p>
-      </form>
-
-      <p class="footer-text">
-        New here? <a href="#">Create account</a>
-      </p>
+      <!-- Reset password (from email link with ?token=...) – usually opened via /reset-password page -->
+      <template v-else-if="mode === 'reset'">
+        <h2>Set new password</h2>
+        <p class="subtitle">Enter the token and your new password</p>
+        <form @submit.prevent="onResetPassword">
+          <div class="input-group">
+            <input v-model="resetToken" type="text" placeholder=" " required />
+            <label>Reset token</label>
+          </div>
+          <div class="input-group">
+            <input v-model="newPassword" type="password" placeholder=" " required />
+            <label>New password</label>
+          </div>
+          <button type="submit" class="signin-btn" :disabled="loading">
+            <span v-if="loading">Updating…</span>
+            <span v-else>Set new password</span>
+          </button>
+          <p v-if="error" class="error">{{ error }}</p>
+        </form>
+        <p class="footer-text">
+          <a href="#" @click.prevent="switchToSignIn">Back to sign in</a>
+        </p>
+      </template>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuth } from '@/composables/useAuth'
+
+type Mode = 'signin' | 'forgot' | 'reset'
 
 const emit = defineEmits<{
   (e: 'close'): void;
 }>()
 
-const email    = ref('')
+const router = useRouter()
+const { login, forgotPassword, resetPassword, user } = useAuth()
+
+const mode = ref<Mode>('signin')
+const email = ref('')
 const password = ref('')
-const loading  = ref(false)
-const error    = ref<string|null>(null)
+const newPassword = ref('')
+const resetToken = ref('')
+const loading = ref(false)
+const error = ref<string | null>(null)
+const forgotSuccess = ref(false)
 
 function close() {
   emit('close')
   error.value = null
   email.value = ''
   password.value = ''
+  newPassword.value = ''
+  resetToken.value = ''
+  forgotSuccess.value = false
+  mode.value = 'signin'
 }
 
-async function onSubmit() {
-  loading.value = false
-  error.value = 'Sign-in is paused while the alpha rolls out. Drop me a note and I\'ll get you onboarded manually.'
+function switchToSignIn() {
+  mode.value = 'signin'
+  error.value = null
+  forgotSuccess.value = false
+  resetToken.value = ''
+  newPassword.value = ''
+}
+
+async function onSignIn() {
+  loading.value = true
+  error.value = null
+  try {
+    await login(email.value, password.value)
+    close()
+    if (user.value?.isAdmin) {
+      router.push('/admin')
+    }
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : 'Sign in failed. Please try again.'
+  } finally {
+    loading.value = false
+  }
+}
+
+async function onForgotPassword() {
+  loading.value = true
+  error.value = null
+  try {
+    await forgotPassword(email.value)
+    forgotSuccess.value = true
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : 'Request failed. Please try again.'
+  } finally {
+    loading.value = false
+  }
+}
+
+async function onResetPassword() {
+  if (!resetToken.value.trim() || !newPassword.value) {
+    error.value = 'Token and new password are required.'
+    return
+  }
+  loading.value = true
+  error.value = null
+  try {
+    await resetPassword(resetToken.value.trim(), newPassword.value)
+    switchToSignIn()
+    error.value = null
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : 'Password reset failed. Token may be expired.'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
-
 
 <style scoped>
 .login-overlay {
@@ -102,6 +215,9 @@ h2 {
               linear-gradient(to right,#00c9ff,#92fe9d) border-box;
   border:1px solid transparent;
 }
+.input-group input[readonly] {
+  opacity: 0.9;
+}
 .input-group label {
   position:absolute; top:.85rem; left:.85rem;
   color:#777; font-size:.95rem; transition:.2s;
@@ -124,8 +240,14 @@ h2 {
 .error {
   color:#f88; margin-top:.5rem; font-size:.9rem;
 }
+.success-msg {
+  color:#9d9; margin-bottom:0.5rem; font-size:.9rem;
+}
+.success-hint {
+  color:#888; font-size:.85rem; margin-bottom:1rem;
+}
 .footer-text {
-  margin-top:1.5rem; color:#666; font-size:.85rem;
+  margin-top:1rem; color:#666; font-size:.85rem;
 }
 .footer-text a {
   color:#00c9ff; text-decoration:none; transition:.2s;

@@ -1,9 +1,19 @@
 node_modules
 dist
 *.local
+*.tsbuildinfo
+.env
+.env.*
+!.env.production.example
+.env.d.ts
+
+# Markdown / documentation
+*.md
+docs/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-*.tsbuildinfo
-.env
-.env.d.ts
+
+# macOS
+.DS_Store

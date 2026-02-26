@@ -1,10 +1,22 @@
-FROM node:22-alpine as build
+FROM node:22-alpine AS build
 WORKDIR /app
+
+ARG VITE_BACKEND_URL=https://api.kanellos.me
+ARG VITE_EMAILJS_SERVICE_ID
+ARG VITE_EMAILJS_TEMPLATE_ID
+ARG VITE_EMAILJS_PUBLIC_KEY
+
+ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
+ENV VITE_EMAILJS_SERVICE_ID=$VITE_EMAILJS_SERVICE_ID
+ENV VITE_EMAILJS_TEMPLATE_ID=$VITE_EMAILJS_TEMPLATE_ID
+ENV VITE_EMAILJS_PUBLIC_KEY=$VITE_EMAILJS_PUBLIC_KEY
+
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build
 
 FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80

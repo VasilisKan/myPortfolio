@@ -21,7 +21,13 @@ services:
       - "traefik.http.middlewares.dashboard-auth.basicauth.users=analytics:$$2y$$05$$C5o53S5OTcOJHlrxvI7JiewTLkXXqLyBnovOvWsnglcy3ph2Zp53q"
 
   vue-app:
-    build: .
+    build:
+      context: .
+      args:
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL:-https://api.kanellos.me}
+        VITE_EMAILJS_SERVICE_ID: ${VITE_EMAILJS_SERVICE_ID}
+        VITE_EMAILJS_TEMPLATE_ID: ${VITE_EMAILJS_TEMPLATE_ID}
+        VITE_EMAILJS_PUBLIC_KEY: ${VITE_EMAILJS_PUBLIC_KEY}
     container_name: portfolio_app
     restart: always
     expose:

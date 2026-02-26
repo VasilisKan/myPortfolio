@@ -1,22 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-// Keep the image imports as they are small.
 import macbook from './../assets/equipmentPhoto/macbook.webp'
 import iphone from './../assets/equipmentPhoto/iphone14plus.webp'
 import mxmaster from './../assets/equipmentPhoto/mxmaster3s.webp'
 import mxmechanical from './../assets/equipmentPhoto/mxmechanicalmini.webp'
 
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string
-
-// A ref to hold the map container div from the template.
 const mapContainer = ref<HTMLDivElement | null>(null)
 const mapError = ref<string | null>(null)
 
 let mapInitialized = false
 let observer: IntersectionObserver | null = null
 
-// This async function will now hold all our map logic.
 const initializeMap = async () => {
   if (mapInitialized) return
 
@@ -28,33 +23,10 @@ const initializeMap = async () => {
   mapError.value = null
 
   try {
-    const [mapboxModule, leafletModule] = await Promise.all([
-      import('mapbox-gl'),
-      import('leaflet')
+    const [L, leafletCss] = await Promise.all([
+      import('leaflet').then((m) => (m as { default?: typeof import('leaflet') }).default ?? m),
+      import('leaflet/dist/leaflet.css')
     ])
-
-    const mapboxgl = (mapboxModule as any).default ?? mapboxModule
-    const L = (leafletModule as any).default ?? leafletModule
-
-    const token = MAPBOX_TOKEN?.trim()
-    if (!token) {
-      mapError.value = 'Map configuration missing.'
-      return
-    }
-
-    mapboxgl.accessToken = token
-    ;(window as any).mapboxgl = mapboxgl
-
-    await Promise.all([
-      import('leaflet/dist/leaflet.css'),
-      import('mapbox-gl/dist/mapbox-gl.css'),
-      import('mapbox-gl-leaflet')
-    ])
-
-    if (typeof (L as any).mapboxGL !== 'function') {
-      console.warn('Leaflet MapboxGL plugin unavailable; map skipped.')
-      return
-    }
 
     const map = L.map(container, {
       zoomControl: false,
@@ -63,13 +35,11 @@ const initializeMap = async () => {
       touchZoom: true,
       scrollWheelZoom: true,
       doubleClickZoom: true
-    }).setView([38.2466, 21.7346], 3.4)
+    }).setView([38.2466, 21.7346], 10)
 
-    const glLayer = (L as any).mapboxGL({
-      style: 'mapbox://styles/vasiliskan01/cm9g7rm1100me01s4b0lh7yg0',
-      accessToken: mapboxgl.accessToken
-    })
-    glLayer.addTo(map)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map)
 
     map.whenReady(() => {
       setTimeout(() => {
@@ -97,7 +67,7 @@ const initializeMap = async () => {
     L.marker([38.2466, 21.7346], { icon: dotIcon }).addTo(map)
     mapInitialized = true
   } catch (error) {
-    console.error('Failed to initialise Mapbox map:', error)
+    console.error('Failed to initialise map:', error)
     mapError.value = 'Unable to load the map right now.'
   }
 }

@@ -188,6 +188,10 @@ const rows = computed(() => {
   height: 200px;
   overflow: hidden;
 }
+ a:hover {
+    background-color: transparent !important;
+    color: #82df8b !important
+  }
 
 .card-image img {
   width: 100%;
@@ -264,19 +268,10 @@ const rows = computed(() => {
 
 
 
-/* .project-link__text:hover {
-  color: #56ffd6;
-}
-
-.project-link__text:hover + .project-link__arrow {
-  transform: translateX(2px);
-  color: #56ffd6;
-} */
-
 /* stop any global anchor-hover color/underline here */
 .project-card .project-link,
 .project-card .project-link:hover {
-  color: #00c9ff;            /* or inherit */
+  color: #00c9ff;           
   text-decoration: none;
 }
 

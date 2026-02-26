@@ -1,109 +1,112 @@
 <script lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faTicket, faCalendar, faUser, faHome, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faTicket, faCalendar, faUser, faHome, faCog, faImages } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
-library.add(faTicket, faCalendar, faUser, faHome, faCog);
+library.add(faTicket, faCalendar, faUser, faHome, faCog, faImages);
 
 export default {
-    name: 'DashboardSidebar',
-    components: {
-        FontAwesomeIcon
+  name: 'DashboardSidebar',
+  components: { FontAwesomeIcon },
+  emits: ['update-active'],
+  data() {
+    return {
+      activeItem: 'Dashboard',
+      items: [
+        { name: 'Dashboard', icon: ['fas', 'calendar'] },
+        { name: 'Tickets', icon: ['fas', 'ticket'] },
+        { name: 'Users', icon: ['fas', 'user'] },
+        { name: 'Showcase', icon: ['fas', 'images'] },
+        { name: 'Settings', icon: ['fas', 'cog'] },
+      ],
+    };
+  },
+  methods: {
+    setActive(itemName: string) {
+      this.activeItem = itemName;
+      this.$emit('update-active', itemName);
     },
-    emits: ['update-active'],  
-    data() {
-        return {
-            activeItem: 'Tickets', 
-            mainMenu: [
-                {
-                    category: 'Main Menu',
-                    subCategories: [
-                        { name: 'Dashboard', icon: ['fas', 'calendar'] },
-                        { name: 'Tickets', icon: ['fas', 'ticket'] },
-                        { name: 'Users', icon: ['fas', 'user'] },
-                        { name: 'Settings', icon: ['fas', 'cog'] }
-                    ]
-                }
-            ]
-        };
-    },
-    methods: {
-        setActive(itemName: string) {
-            this.activeItem = itemName;
-            this.$emit('update-active', itemName);  
-        }
-    }
+  },
 };
 </script>
 
 <template>
-    <div class="sidebar-wrap">
-        <img src="./../assets/logoMainTransparent.webp" alt="logoTransparent" class="logo" />
-
-        <div v-for="(category, index) in mainMenu" :key="index">
-            <h3 class="category-title">{{ category.category }}</h3>
-            
-            <div 
-                v-for="(item, idx) in category.subCategories" 
-                :key="idx" 
-                :class="['menu-item', { active: activeItem === item.name }]"
-                @click="setActive(item.name)"
-            >
-                <font-awesome-icon :icon="item.icon" class="menu-icon" />
-                <span>{{ item.name }}</span>
-            </div>
-        </div>
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../assets/logoMainTransparent.webp" alt="Logo" />
     </div>
+    <nav class="sidebar-nav">
+      <button
+        v-for="item in items"
+        :key="item.name"
+        type="button"
+        :class="['nav-item', { active: activeItem === item.name }]"
+        @click="setActive(item.name)"
+      >
+        <font-awesome-icon :icon="item.icon" class="nav-icon" />
+        <span>{{ item.name }}</span>
+      </button>
+    </nav>
+  </div>
 </template>
 
 <style scoped>
-.sidebar-wrap {
-    display: flex;
-    flex-direction: column;
-    padding: 30px 0px 0px 30px;
-    color: grey;
-}
-.sidebar-wrap .logo {
-    width: 80px;
-    height: auto;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.25rem 0;
 }
 
-.category-title {
-    margin-top: 30px;
-    margin-bottom: 10px;
-    font-weight: 700;
-    color: #b3b3b3;
-    font-size: 18px;
-}
-.menu-item {
-    padding: 10px 5px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}  
-.menu-item span {
-    font-size: 17px;
-    font-weight: 700;
-    transition: color 0.3s;
+.sidebar-logo {
+  padding: 0 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--dashboard-border);
+  margin-bottom: 1rem;
 }
 
-.menu-icon {
-    font-size: 20px;
-    color: b3b3b3; 
-    transition: color 0.3s;
-    margin-right: 20px;
-}
-.menu-item:hover .menu-icon,
-.menu-item:hover span,
-.menu-item.active .menu-icon,
-.menu-item.active{
-    color: white; 
-    
+.sidebar-logo img {
+  width: 56px;
+  height: auto;
+  display: block;
 }
 
-.menu-item.active,
-.menu-item:hover {
-    border-right: 1px solid #29cdff; 
-    background: linear-gradient(to right, #4ae4ff00, #1D8BF117);
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 0.75rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--dashboard-text-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-item:hover {
+  background: var(--dashboard-hover);
+  color: var(--dashboard-text);
+}
+
+.nav-item.active {
+  background: var(--dashboard-accent-bg);
+  color: var(--dashboard-accent);
+}
+
+.nav-icon {
+  font-size: 1rem;
+  width: 1.25rem;
+  opacity: 0.85;
 }
 </style>

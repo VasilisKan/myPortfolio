@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 import LoginPopup from './LoginPopup.vue';
 import { useAuth } from '@/composables/useAuth';
 import { useRouter } from 'vue-router';
@@ -7,7 +8,7 @@ import githubIcon from '../assets/github.webp';
 import linkedinIcon from '../assets/linkedIn.webp';
 import emailIcon from '../assets/instagram.webp';
 
-const { isLoggedIn } = useAuth();
+const { isLoggedIn, logout } = useAuth();
 const router = useRouter();
 
 const showMenu = ref(false);
@@ -31,7 +32,11 @@ function closeLogin() { showLogin.value = false; }
 
 async function handleLogout() {
   showMenu.value = false;
-  router.push('/').then(() => window.location.reload());
+  try {
+    await logout();
+  } catch {
+  }
+  await router.push('/');
 }
 </script>
 
@@ -46,6 +51,9 @@ async function handleLogout() {
       <ul class="menu" :class="{ active: showMenu }">
         <li v-for="item in menuItems" :key="item.name">
           <a :href="item.href" @click="toggleMenu">{{ item.name }}</a>
+        </li>
+        <li v-if="isLoggedIn">
+          <RouterLink to="/dashboard" class="menu-link" @click="toggleMenu">Dashboard</RouterLink>
         </li>
         <li class="mobile-signin">
           <button v-if="!isLoggedIn" @click="openLogin">Sign In</button>
@@ -135,10 +143,22 @@ async function handleLogout() {
   transition: all 0.25s ease-in-out;
 }
 
-.menu li a:hover {
+.menu li a:hover,
+.menu li .menu-link:hover {
   color: #42f5e9;
   background: rgba(255,255,255,0.08);
   box-shadow: 0 0 6px rgba(66,245,233,0.6);
+}
+
+.menu .menu-link {
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.5px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.25s ease-in-out;
 }
 
 .social-icons {

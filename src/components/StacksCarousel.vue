@@ -67,7 +67,6 @@ library.add(
   faCode
 )
 
-// Define type for stack item
 interface Stack {
   type: 'fa' | 'svg'
   icon: any 

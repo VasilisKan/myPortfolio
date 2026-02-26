@@ -227,6 +227,11 @@ const registerStrip = (el: Element | null) => {
   }
 }
 
+const onStripRef = (el: unknown) => {
+  const node = el instanceof HTMLElement ? el : (el as { $el?: HTMLElement })?.$el ?? null
+  if (node) registerStrip(node)
+}
+
 const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Escape') {
     closeLightbox()
@@ -306,7 +311,7 @@ onBeforeUnmount(() => {
             v-if="step.screens && step.screens.length"
             class="journey-media"
             :class="{ 'journey-media--strip': step.screens.length > 2 }"
-            :ref="el => { if (step.screens.length > 2) registerStrip(el) }"
+            :ref="step.screens.length > 2 ? onStripRef : undefined"
           >
             <img
               v-for="(screen, screenIndex) in step.screens"
@@ -628,6 +633,8 @@ onBeforeUnmount(() => {
 .lightbox__image {
   width: 100%;
   height: auto;
+  max-height: calc(90vh - 3rem);
+  object-fit: contain;
   border-radius: 16px;
   border: 1px solid rgba(0, 201, 255, 0.2);
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45);
@@ -660,6 +667,24 @@ onBeforeUnmount(() => {
 .lightbox__close:focus-visible {
   outline: 2px solid rgba(0, 201, 255, 0.8);
   outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .lightbox__content {
+    max-width: 92vw;
+    max-height: 78vh;
+    padding: 0 0.75rem;
+  }
+
+  .lightbox__image {
+    width: 100%;
+    max-height: calc(78vh - 2.5rem);
+  }
+
+  .lightbox__close {
+    top: 8px;
+    right: 8px;
+  }
 }
 
 .tech-section,
