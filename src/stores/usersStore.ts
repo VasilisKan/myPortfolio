@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-
+import { api } from '../lib/api'
 import { API_BASE } from '../config'
-const AUTH_USERS =
+
+const AUTH_USERS_URL =
   typeof import.meta.env.VITE_AUTH_USERS_URL === 'string' &&
   import.meta.env.VITE_AUTH_USERS_URL !== ''
     ? import.meta.env.VITE_AUTH_USERS_URL
-    : `${API_BASE}/api/auth/users`
+    : null
+const AUTH_USERS_PATH = '/api/auth/users'
 const fetchConfig = { credentials: 'include' as RequestCredentials }
 
 export interface AppUser {
@@ -61,7 +63,8 @@ export const useUsersStore = defineStore('users', {
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 15000)
       try {
-        const res = await fetch(AUTH_USERS, { ...fetchConfig, signal: controller.signal })
+        const url = AUTH_USERS_URL ?? `${API_BASE}${AUTH_USERS_PATH}`
+        const res = await fetch(url, { ...fetchConfig, signal: controller.signal })
         clearTimeout(timeoutId)
         let text = await res.text()
         if (text.charCodeAt(0) === 0xfeff) text = text.slice(1)
@@ -105,9 +108,11 @@ export const useUsersStore = defineStore('users', {
       id: string,
       payload: { username?: string; email?: string; isAdmin?: boolean }
     ) {
-      await axios.put(`${AUTH_USERS}/${id}`, payload, {
-        withCredentials: true,
-      })
+      if (AUTH_USERS_URL) {
+        await axios.put(`${AUTH_USERS_URL}/${id}`, payload, { withCredentials: true })
+      } else {
+        await api.put(`${AUTH_USERS_PATH}/${id}`, payload)
+      }
       await this.loadAllUsers()
     },
   },

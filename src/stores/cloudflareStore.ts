@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { api } from '../lib/api'
 
-import { API_BASE } from '../config'
-const CLOUDFLARE_BASE = `${API_BASE}/api/cloudflare/analytics`
+const CLOUDFLARE_BASE = '/api/cloudflare/analytics'
 
 export interface CloudflareDashboardQuery {
   since?: string
@@ -171,12 +170,9 @@ export const useCloudflareStore = defineStore('cloudflare', {
       this.loading = true
       this.error = null
       try {
-        const { data: raw } = await axios.get<CloudflareDashboardResponse | CloudflareGraphQLResponse>(
+        const { data: raw } = await api.get<CloudflareDashboardResponse | CloudflareGraphQLResponse>(
           `${CLOUDFLARE_BASE}/dashboard`,
-          {
-            params: params ?? {},
-            withCredentials: true,
-          }
+          { params: params ?? {} }
         )
         if (raw && isGraphQLResponse(raw)) {
           this.data = normalizeGraphQLResponse(raw)

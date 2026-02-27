@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
-import { API_BASE } from '../config'
+import { api } from '../lib/api'
 
 interface User {
   email: string
@@ -15,7 +14,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async fetchMe() {
       try {
-        const res = await axios.get(`${API_BASE}/api/auth/me`, { withCredentials: true })
+        const res = await api.get('/api/auth/me')
         this.user = res.data
         this.isAuthenticated = true
       } catch {
@@ -24,11 +23,11 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async login(email: string, password: string) {
-      await axios.post(`${API_BASE}/api/auth/login`, { email, password }, { withCredentials: true })
+      await api.post('/api/auth/login', { email, password })
       await this.fetchMe()
     },
     async logout() {
-      await axios.post(`${API_BASE}/api/auth/logout`, {}, { withCredentials: true })
+      await api.post('/api/auth/logout', {})
       this.user = null
       this.isAuthenticated = false
     }

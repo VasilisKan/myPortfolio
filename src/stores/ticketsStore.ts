@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { api } from '../lib/api'
 
-import { API_BASE } from '../config'
-const TICKET_BASE = `${API_BASE}/ticket/TicketSubmit`
+const TICKET_BASE = '/ticket/TicketSubmit'
 const MY_TICKETS_PATH = 'my-tickets'
 
 export interface TicketReply {
@@ -70,9 +69,7 @@ export const useTicketStore = defineStore('ticket', {
       this.loading = true
       this.error = null
       try {
-        const { data } = await axios.get<unknown>(`${TICKET_BASE}/get`, {
-          withCredentials: true,
-        })
+        const { data } = await api.get<unknown>(`${TICKET_BASE}/get`, {})
         this.tickets = toTicketArray(data ?? [])
       } catch (err: any) {
         this.error = err.response?.data ?? err.message ?? 'Failed to load tickets'
@@ -82,10 +79,10 @@ export const useTicketStore = defineStore('ticket', {
     },
 
     async submitTicket(payload: { title: string; description: string; category: string }) {
-      const { data } = await axios.post<{ message?: string; ticketId?: string }>(
+      const { data } = await api.post<{ message?: string; ticketId?: string }>(
         `${TICKET_BASE}/submit`,
         payload,
-        { withCredentials: true }
+        {}
       )
       const ticketId = data?.ticketId
       if (ticketId == null || ticketId === '') {
@@ -103,9 +100,9 @@ export const useTicketStore = defineStore('ticket', {
       this.repliesLoading = true
       this.repliesError = null
       try {
-        const { data } = await axios.get<TicketReply[]>(
+        const { data } = await api.get<TicketReply[]>(
           `${TICKET_BASE}/${ticketId}/replies`,
-          { withCredentials: true }
+          {}
         )
         this.replies = data ?? []
         return this.replies
@@ -119,10 +116,10 @@ export const useTicketStore = defineStore('ticket', {
     },
 
     async replyToTicket(ticketId: string, message: string) {
-      await axios.post<{ message: string; replyId: string }>(
+      await api.post<{ message: string; replyId: string }>(
         `${TICKET_BASE}/${ticketId}/reply`,
         { message },
-        { withCredentials: true }
+        {}
       )
       await this.getReplies(ticketId)
     },
@@ -131,23 +128,17 @@ export const useTicketStore = defineStore('ticket', {
       id: string,
       payload: { title: string; description: string; category: string }
     ) {
-      await axios.put(`${TICKET_BASE}/update/${id}`, payload, {
-        withCredentials: true,
-      })
+      await api.put(`${TICKET_BASE}/update/${id}`, payload, {})
       await this.loadOpenTickets()
     },
 
     async resolveTicket(id: string) {
-      await axios.put(`${TICKET_BASE}/resolve/${id}`, null, {
-        withCredentials: true,
-      })
+      await api.put(`${TICKET_BASE}/resolve/${id}`, null, {})
       await this.loadOpenTickets()
     },
 
     async reopenTicket(id: string) {
-      await axios.put(`${TICKET_BASE}/reopen/${id}`, null, {
-        withCredentials: true,
-      })
+      await api.put(`${TICKET_BASE}/reopen/${id}`, null, {})
       await this.loadOpenTickets()
     },
 
@@ -155,16 +146,16 @@ export const useTicketStore = defineStore('ticket', {
       this.loading = true
       this.error = null
       this.tickets = []
-      const config = { withCredentials: true as const }
+      const config = {}
 
       try {
         try {
-          const { data } = await axios.get<unknown>(`${TICKET_BASE}/${MY_TICKETS_PATH}`, config)
+          const { data } = await api.get<unknown>(`${TICKET_BASE}/${MY_TICKETS_PATH}`, config)
           this.tickets = toTicketArray(data)
           return
         } catch (first: any) {
           if (first.response?.status === 404) {
-            const { data } = await axios.get<unknown>(`${TICKET_BASE}/get`, config)
+            const { data } = await api.get<unknown>(`${TICKET_BASE}/get`, config)
             this.tickets = toTicketArray(data)
             return
           }
@@ -183,9 +174,7 @@ export const useTicketStore = defineStore('ticket', {
     },
 
     async deleteTicket(id: string) {
-      await axios.delete(`${TICKET_BASE}/delete/${id}`, {
-        withCredentials: true,
-      })
+      await api.delete(`${TICKET_BASE}/delete/${id}`, {})
       await this.loadOpenTickets()
     },
   },

@@ -1,7 +1,5 @@
 import { ref } from 'vue'
-import axios from 'axios'
-
-import { API_BASE } from '../config'
+import { api } from '../lib/api'
 
 interface Ticket {
   id: string
@@ -21,9 +19,7 @@ export function useTickets() {
     loading.value = true
     error.value = null
     try {
-      const response = await axios.get(`${API_BASE}/ticket/TicketSubmit/get`, {
-        withCredentials: true 
-      })
+      const response = await api.get('/ticket/TicketSubmit/get')
       tickets.value = response.data
     } catch (err: any) {
       error.value = err.message || 'Error fetching tickets'

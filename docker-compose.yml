@@ -34,7 +34,7 @@ services:
       - "80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.vueapp.rule=Host(`kanellos.me`)"
+      - "traefik.http.routers.vueapp.rule=Host(`kanellos.me`) || Host(`www.kanellos.me`)"
       - "traefik.http.routers.vueapp.entrypoints=web"
 
 networks:
