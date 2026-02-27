@@ -10,16 +10,18 @@ Expose your backend API at `https://api.kanellos.me` via Traefik.
 
 ## Setup
 
-1. **Dynamic config** – `traefik/dynamic/api.yml` is already in the repo. It routes `api.kanellos.me` → `host.docker.internal:5000`.
+1. **Dynamic config** – The dynamic configuration is located in the root `traefik/dynamic/api.yml`. It routes `api.kanellos.me` → `host.docker.internal:5000`.
 
-2. **docker-compose.yml** – Traefik has been updated with:
-   - File provider pointing at `traefik/dynamic`
-   - `extra_hosts` so `host.docker.internal` works on Linux
+2. **docker-compose.yml** – Traefik is now in a standalone folder:
+   - Root `traefik/docker-compose.yml` manages the Traefik service.
+   - It includes the file provider for `dynamic/` and `extra_hosts` for host connectivity.
 
 3. **Restart the stack:**
 
    ```bash
-   cd /srv/portfolio
+   cd traefik
+   docker compose up -d
+   cd ../myPortfolio
    docker compose up -d
    ```
 

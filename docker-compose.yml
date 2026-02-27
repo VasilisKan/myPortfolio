@@ -1,30 +1,4 @@
 services:
-  traefik:
-    image: traefik:v2.10
-    container_name: traefik
-    restart: always
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    command:
-      - --api.dashboard=true
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --providers.file.directory=/etc/traefik/dynamic
-      - --providers.file.watch=true
-      - --entrypoints.web.address=:80
-    ports:
-      - "80:80"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/dynamic:/etc/traefik/dynamic:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.traefik-dashboard.rule=Host(`analytics.kanellos.me`)"
-      - "traefik.http.routers.traefik-dashboard.service=api@internal"
-      - "traefik.http.routers.traefik-dashboard.entrypoints=web"
-      - "traefik.http.routers.traefik-dashboard.middlewares=dashboard-auth"
-      - "traefik.http.middlewares.dashboard-auth.basicauth.users=analytics:$$2y$$05$$C5o53S5OTcOJHlrxvI7JiewTLkXXqLyBnovOvWsnglcy3ph2Zp53q"
-
   vue-app:
     build:
       context: .
