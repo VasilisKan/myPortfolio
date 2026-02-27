@@ -14,7 +14,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.vueapp.rule=Host(`kanellos.me`) || Host(`www.kanellos.me`)"
-      - "traefik.http.routers.vueapp.entrypoints=web"
+      - "traefik.http.routers.vueapp.entrypoints=websecure"
+      - "traefik.http.routers.vueapp.tls.certresolver=letsencrypt"
+      # Optional: Redirect HTTP to HTTPS for the frontend
+      - "traefik.http.routers.vueapp-http.rule=Host(`kanellos.me`) || Host(`www.kanellos.me`)"
+      - "traefik.http.routers.vueapp-http.entrypoints=web"
+      - "traefik.http.routers.vueapp-http.middlewares=redirect-to-https@file"
 
 networks:
   default:
