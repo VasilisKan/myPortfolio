@@ -23,7 +23,7 @@ const menuItems = [
 const socialLinks = [
   { name: 'GitHub', href: 'https://github.com/VasilisKan', icon: githubIcon },
   { name: 'LinkedIn', href: 'https://www.linkedin.com/in/vkanellos', icon: linkedinIcon },
-  { name: 'Instagram', href: 'mailto:vasilis@kanellos.me', icon: emailIcon },
+  { name: 'Instagram', href: 'https://www.instagram.com/_kanellos._', icon: emailIcon },
 ];
 
 function toggleMenu() { showMenu.value = !showMenu.value; }

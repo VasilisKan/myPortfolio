@@ -16,7 +16,7 @@ library.add(
 const socialData = [
   { label: 'GitHub', link: 'https://github.com/VasilisKan', icon: ['fab', 'github'] },
   { label: 'LinkedIn', link: 'https://www.linkedin.com/in/vkanellos', icon: ['fab', 'linkedin'] },
-  { label: 'Instagram', link: 'https://www.instagram.com/vasilis.kanelos', icon: ['fab', 'instagram'] },
+  { label: 'Instagram', link: 'https://www.instagram.com/_kanellos._', icon: ['fab', 'instagram'] },
   { label: 'Email', link: 'mailto:vasilis@kanellos.me', icon: ['fas', 'envelope'] },
 ]
 </script>

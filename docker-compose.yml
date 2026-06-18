@@ -7,21 +7,10 @@ services:
         VITE_EMAILJS_SERVICE_ID: ${VITE_EMAILJS_SERVICE_ID}
         VITE_EMAILJS_TEMPLATE_ID: ${VITE_EMAILJS_TEMPLATE_ID}
         VITE_EMAILJS_PUBLIC_KEY: ${VITE_EMAILJS_PUBLIC_KEY}
-    container_name: portfolio_app
+    image: portfolio-frontend:latest
+    container_name: portfolio_frontend
     restart: always
-    expose:
-      - "80"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vueapp.rule=Host(`kanellos.me`) || Host(`www.kanellos.me`)"
-      - "traefik.http.routers.vueapp.entrypoints=websecure"
-      - "traefik.http.routers.vueapp.tls.certresolver=letsencrypt"
-      # Optional: Redirect HTTP to HTTPS for the frontend
-      - "traefik.http.routers.vueapp-http.rule=Host(`kanellos.me`) || Host(`www.kanellos.me`)"
-      - "traefik.http.routers.vueapp-http.entrypoints=web"
-      - "traefik.http.routers.vueapp-http.middlewares=redirect-to-https@file"
-
-networks:
-  default:
-    name: web
-    external: true
+    # NPM (running on the host) terminates TLS and proxies
+    # kanellos.me / www.kanellos.me -> http://10.10.100.95:8090
+    ports:
+      - "8090:80"
